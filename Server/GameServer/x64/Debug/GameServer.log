@@ -1,1 +1,15 @@
-﻿  GameServer.vcxproj -> D:\Hanil\0530\2024_5_30_Unreal\Server\Server\Binary\Debug\GameServer.exe
+﻿  pch.cpp
+  AccountManager.cpp
+  GameServer.cpp
+  UserManager.cpp
+  코드를 생성하고 있습니다...
+AccountManager.obj : error LNK2019: "public: void __cdecl Lock::WriteLock(char const *)" (?WriteLock@Lock@@QEAAXPEBD@Z)"public: __cdecl WriteLockGuard::WriteLockGuard(class Lock &,char const *)" (??0WriteLockGuard@@QEAA@AEAVLock@@PEBD@Z) 함수에서 참조되는 확인할 수 없는 외부 기호
+UserManager.obj : error LNK2001: 확인할 수 없는 외부 기호 "public: void __cdecl Lock::WriteLock(char const *)" (?WriteLock@Lock@@QEAAXPEBD@Z)
+AccountManager.obj : error LNK2019: "public: void __cdecl Lock::WriteUnlock(char const *)" (?WriteUnlock@Lock@@QEAAXPEBD@Z)"public: __cdecl WriteLockGuard::~WriteLockGuard(void)" (??1WriteLockGuard@@QEAA@XZ) 함수에서 참조되는 확인할 수 없는 외부 기호
+UserManager.obj : error LNK2001: 확인할 수 없는 외부 기호 "public: void __cdecl Lock::WriteUnlock(char const *)" (?WriteUnlock@Lock@@QEAAXPEBD@Z)
+GameServer.obj : error LNK2019: "private: __cdecl CoreGlobal::CoreGlobal(void)" (??0CoreGlobal@@AEAA@XZ)"public: static void __cdecl CoreGlobal::Create(void)" (?Create@CoreGlobal@@SAXXZ) 함수에서 참조되는 확인할 수 없는 외부 기호
+GameServer.obj : error LNK2019: "private: __cdecl CoreGlobal::~CoreGlobal(void)" (??1CoreGlobal@@AEAA@XZ)"private: void * __cdecl CoreGlobal::`scalar deleting destructor'(unsigned int)" (??_GCoreGlobal@@AEAAPEAXI@Z) 함수에서 참조되는 확인할 수 없는 외부 기호
+GameServer.obj : error LNK2019: "public: void __cdecl ThreadManager::Launch(class std::function<void __cdecl(void)>)" (?Launch@ThreadManager@@QEAAXV?$function@$$A6AXXZ@std@@@Z)main 함수에서 참조되는 확인할 수 없는 외부 기호
+GameServer.obj : error LNK2019: "public: void __cdecl ThreadManager::Join(void)" (?Join@ThreadManager@@QEAAXXZ)main 함수에서 참조되는 확인할 수 없는 외부 기호
+GameServer.obj : error LNK2001: 확인할 수 없는 외부 기호 "private: static class CoreGlobal * CoreGlobal::_instance" (?_instance@CoreGlobal@@0PEAV1@EA)
+C:\UnrealProjects\Server\Server\Server\Binary\Debug\GameServer.exe : fatal error LNK1120: 7개의 확인할 수 없는 외부 참조입니다.

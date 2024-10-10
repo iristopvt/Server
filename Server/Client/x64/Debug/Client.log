@@ -1,1 +1,5 @@
-﻿  Client.vcxproj -> D:\Hanil\0530\2024_5_30_Unreal\Server\Server\Binary\Debug\Client.exe
+﻿  pch.cpp
+  Client.cpp
+C:\UnrealProjects\Server\Server\Server\Client\Client.cpp(5,5): error C3861: 'HelloWorld': 식별자를 찾을 수 없습니다.
+  (소스 파일 '/Client.cpp'을(를) 컴파일하는 중)
+  
