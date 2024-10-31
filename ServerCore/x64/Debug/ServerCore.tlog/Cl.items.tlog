@@ -1,0 +1,13 @@
+C:\Users\zxcvb\Downloads\Server\ServerCore\Allocator.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\Allocator.obj
+C:\Users\zxcvb\Downloads\Server\ServerCore\CoreGlobal.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\CoreGlobal.obj
+C:\Users\zxcvb\Downloads\Server\ServerCore\CoreTLS.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\CoreTLS.obj
+C:\Users\zxcvb\Downloads\Server\ServerCore\DeadLockProfiler.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\DeadLockProfiler.obj
+C:\Users\zxcvb\Downloads\Server\ServerCore\Lock.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\Lock.obj
+C:\Users\zxcvb\Downloads\Server\ServerCore\LockBasedQueue.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\LockBasedQueue.obj
+C:\Users\zxcvb\Downloads\Server\ServerCore\LockBasedStack.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\LockBasedStack.obj
+C:\Users\zxcvb\Downloads\Server\ServerCore\Memory.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\Memory.obj
+C:\Users\zxcvb\Downloads\Server\ServerCore\MemoryPool.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\MemoryPool.obj
+C:\Users\zxcvb\Downloads\Server\ServerCore\pch.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\pch.obj
+C:\Users\zxcvb\Downloads\Server\ServerCore\RefCounting.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\RefCounting.obj
+C:\Users\zxcvb\Downloads\Server\ServerCore\ServerCore.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\ServerCore.obj
+C:\Users\zxcvb\Downloads\Server\ServerCore\ThreadManager.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\ThreadManager.obj

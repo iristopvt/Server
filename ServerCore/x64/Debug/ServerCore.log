@@ -1,0 +1,5 @@
+﻿  Memory.cpp
+C:\Users\zxcvb\Downloads\Server\ServerCore\Memory.cpp(10,15): warning C4552: '-': 식의 결과가 사용되지 않습니다.
+  (소스 파일 '/Memory.cpp'을(를) 컴파일하는 중)
+  
+  ServerCore.vcxproj -> C:\Users\zxcvb\Downloads\Server\Libraries\Debug\ServerCore.lib
