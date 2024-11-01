@@ -1257,15 +1257,29 @@ const int32 BuffSize = 1000;
 
 struct  Session
 {
+	WSAOVERLAPPED overlapped = {}; // WSASend, WSARecv 했을 떄 성공, 실패 사유 확인
 	SOCKET socket = INVALID_SOCKET;
 	char recvBuffer[BuffSize] = {};
 	char sendBuffer[100] = "Hello Im Server!!";
 	int32 recvBytes = 0;
 	int32 sendBytes = 0;
 
-	WSAOVERLAPPED overlapped = {}; // WSASend, WSARecv 했을 떄 성공, 실패 사유 확인
 
 };
+
+// Kenel에서 recvBuff에 온 데이터들을 유저단계의 recvBuff에 성공적으로 복사했을 떄 호출되는 함수 
+void CALLBACK RecvCallBack(DWORD error, DWORD recvLen, LPWSAOVERLAPPED overlapped, DWORD flaps)
+{
+	cout << "Data Recv Len : " << recvLen << endl;
+
+	// client...
+	// ...
+	Session* curSession = reinterpret_cast<Session*>(overlapped);
+
+	cout << curSession->recvBuffer << endl;
+
+
+}
 
 int main()
 {
@@ -1345,6 +1359,21 @@ int main()
 	// 3. -> 성공했으면 결과 얻어서 처리
 	//    -> 실패했으면 사유 확인하고(Pending 상태면 그대로 다음 꺼 진행)
 
+	// OverLappend Event 기반 ID 모델의 장점
+	// 1. (비동기, 넌블록킹)
+	// 
+	// OverLappend Event 기반 ID 모델의 단점
+	// 1. 성능 
+	// -> session과 wsaevent를 묶어줘야한다.
+	// -> 1000명의 session(Client)의 네트워크를 위해서 1000개의 wsaEvent가 필요하다.
+	// ... 최대 64개 
+	// 결론 : 서버에 적합한 모델이 아니다.
+	// 
+
+	// -----------------Oerlapped Callback based----------------------
+	// APC Queue
+	// 쓰레드가 알람 가능한 상태? 가 되었을 때 호출할 콜백 함수를 모아둔 Queue
+
 
 
 	while (true)
@@ -1376,6 +1405,8 @@ int main()
 
 		while (true)
 		{
+			
+
 			WSABUF wsaBuf;
 			wsaBuf.buf = session.recvBuffer;
 			wsaBuf.len = BuffSize;
@@ -1384,15 +1415,15 @@ int main()
 			DWORD flags = 0;
 
 			// 비동기 WSARecv
-			if (::WSARecv(clientSocket, &wsaBuf, 1, &recvLen, &flags, &session.overlapped, nullptr) == SOCKET_ERROR)
+			if (::WSARecv(clientSocket, &wsaBuf, 1, &recvLen, &flags, &session.overlapped, &RecvCallBack) == SOCKET_ERROR)
 			{
 				// WSARecv가실패
 
 				if (::WSAGetLastError() == WSA_IO_PENDING)
 				{
 					// Pending :: 보류하고 나중에 확인
-					::WSAWaitForMultipleEvents(1, &wsaEvent, TRUE, WSA_INFINITE, FALSE);
-					::WSAGetOverlappedResult(session.socket, &session.overlapped, &recvLen, FALSE, &flags);
+					// Alertable Wais 상태로 변경
+					::SleepEx(INFINITE, TRUE);
 					
 				}
 				else
@@ -1445,7 +1476,6 @@ int main()
 		}
 
 		::closesocket(session.socket);
-		::WSACloseEvent(wsaEvent);
 
 	}
 
