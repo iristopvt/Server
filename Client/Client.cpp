@@ -65,14 +65,17 @@ int main()
 
 	// - session -
 	char sendBuffer[100] = "Hello Server!";
-
-	// Recv
-	char recvBuffer[100] = "yo! ";
-
 	// Overlapped
 	WSAEVENT wsaEvent = WSACreateEvent();
 	WSAOVERLAPPED overlapped = {};
 	overlapped.hEvent = wsaEvent;
+	// Recv
+	char recvBuffer[100] = "yo! ";
+
+	//// Overlapped
+	//WSAEVENT wsaEvent = WSACreateEvent();
+	//WSAOVERLAPPED overlapped = {};
+	//overlapped.hEvent = wsaEvent;
 
 	// Send
 	while (true)
@@ -107,26 +110,26 @@ int main()
 		
 		// Recv
 		// 과제? 
-		wsaBuf.buf = recvBuffer;
-		wsaBuf.len = sizeof(recvBuffer);
+		//wsaBuf.buf = recvBuffer;
+		//wsaBuf.len = sizeof(recvBuffer);
 
-		DWORD recvLen = 0;
-		
-		if (WSARecv(clientSocket, &wsaBuf,1,&recvLen,&flags, &overlapped,nullptr) == SOCKET_ERROR)
-		{
-			if (::WSAGetLastError() == WSA_IO_PENDING)
-			{
-				::WSAWaitForMultipleEvents(1, &wsaEvent, TRUE, WSA_INFINITE, FALSE);
-				::WSAGetOverlappedResult(clientSocket, &overlapped, &recvLen, FALSE, &flags);
-			}
-			else
-			{
-				// TODO : 문제가 있는 상황
-				break;
-			}
+		//DWORD recvLen = 0;
+		//
+		//if (WSARecv(clientSocket, &wsaBuf,1,&recvLen,&flags, &overlapped,nullptr) == SOCKET_ERROR)
+		//{
+		//	if (::WSAGetLastError() == WSA_IO_PENDING)
+		//	{
+		//		::WSAWaitForMultipleEvents(1, &wsaEvent, TRUE, WSA_INFINITE, FALSE);
+		//		::WSAGetOverlappedResult(clientSocket, &overlapped, &recvLen, FALSE, &flags);
+		//	}
+		//	else
+		//	{
+		//		// TODO : 문제가 있는 상황
+		//		break;
+		//	}
 
-		}
-		cout << "recv Data! Len = " << sizeof(recvBuffer) << endl;
+		//}
+		//cout << "recv Data! Len = " << sizeof(recvBuffer) << endl;
 
 
 		this_thread::sleep_for(1s);

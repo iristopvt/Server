@@ -15,7 +15,9 @@ using namespace std;
 #include "CoreMacro.h"
 #include "MyContainer.h"
 
-// Multy Thread
+
+// Multi Thread
+#include "ThreadManager.h"
 #include "Lock.h"
 
 // Memory

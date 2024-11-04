@@ -1,5 +1,2 @@
 ﻿  GameServer.cpp
-C:\Users\zxcvb\Downloads\Server\GameServer\GameServer.cpp(1435,22): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-  (소스 파일 '/GameServer.cpp'을(를) 컴파일하는 중)
-  
   GameServer.vcxproj -> C:\Users\zxcvb\Downloads\Server\Binary\Debug\GameServer.exe
