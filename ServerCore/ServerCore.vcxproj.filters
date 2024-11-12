@@ -13,6 +13,9 @@
     <Filter Include="Memory">
       <UniqueIdentifier>{8e0f9d59-3759-4099-bea3-b881cf60e527}</UniqueIdentifier>
     </Filter>
+    <Filter Include="NeWork">
+      <UniqueIdentifier>{49c01813-b8e1-44bf-a9e1-090b54bdb35d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CorePch.h">
@@ -63,6 +66,27 @@
     <ClInclude Include="MemoryPool.h">
       <Filter>Memory</Filter>
     </ClInclude>
+    <ClInclude Include="SocketUtility.h">
+      <Filter>NeWork</Filter>
+    </ClInclude>
+    <ClInclude Include="NetAddress.h">
+      <Filter>NeWork</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpCore.h">
+      <Filter>NeWork</Filter>
+    </ClInclude>
+    <ClInclude Include="Listener.h">
+      <Filter>NeWork</Filter>
+    </ClInclude>
+    <ClInclude Include="Session.h">
+      <Filter>NeWork</Filter>
+    </ClInclude>
+    <ClInclude Include="IocpEvent.h">
+      <Filter>NeWork</Filter>
+    </ClInclude>
+    <ClInclude Include="Service.h">
+      <Filter>NeWork</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -103,6 +127,27 @@
     </ClCompile>
     <ClCompile Include="MemoryPool.cpp">
       <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="SocketUtility.cpp">
+      <Filter>NeWork</Filter>
+    </ClCompile>
+    <ClCompile Include="NetAddress.cpp">
+      <Filter>NeWork</Filter>
+    </ClCompile>
+    <ClCompile Include="IocpCore.cpp">
+      <Filter>NeWork</Filter>
+    </ClCompile>
+    <ClCompile Include="Listener.cpp">
+      <Filter>NeWork</Filter>
+    </ClCompile>
+    <ClCompile Include="Session.cpp">
+      <Filter>NeWork</Filter>
+    </ClCompile>
+    <ClCompile Include="IocpEvent.cpp">
+      <Filter>NeWork</Filter>
+    </ClCompile>
+    <ClCompile Include="Service.cpp">
+      <Filter>NeWork</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -2,6 +2,8 @@
 class ThreadManager;
 class DeadLockProfiler;
 class Memory;
+class IocpEvent;
+class IocpCore;
 
 class CoreGlobal
 {
@@ -35,11 +37,13 @@ public:
 	ThreadManager* GetThreadManager() { return _threadManager; }
 	DeadLockProfiler* GetDeadLockProfiler() { return _deadLockProfinler; }
 	Memory* GetMemory() { return _memory; }
+
 private:
 	static CoreGlobal* _instance;
 
 	class ThreadManager*	_threadManager;
 	DeadLockProfiler*		_deadLockProfinler;
 	Memory* _memory;
+
 };
 

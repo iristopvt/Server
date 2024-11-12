@@ -12,132 +12,213 @@
 
 #pragma comment(lib,"ws2_32.lib")
 
+#include "Service.h"
+
+class ServerSession : public Session
+{
+public:
+	ServerSession()
+	{
+		string temp = "Hellp Server!! Im Client";
+		::memcpy(_sendBuffer, temp.data(), temp.size());
+	}
+	virtual void OnConnected() override
+	{
+		cout << "Server에 접속 성공!! " << endl;
+	}
+	virtual int32 OnRecv(BYTE* buffer, int32 len) override 
+	{ 
+		cout << buffer << endl;
+		
+		Send(reinterpret_cast<BYTE*>(_sendBuffer), 1000);
+		
+		return len; 
+	}
+	virtual void Onsend(int32 len)  override
+	{
+		cout << "Send 성공 : " << len << endl;
+	}
+	virtual void DisConnected() override
+	{
+		cout << "DisConnected" << endl;
+	}
+};
+
 int main()
 {
-	 	 //we are question
-			 //who? gatAI! 
+	this_thread::sleep_for(1s);
 
-	WSAData wsaData;
-	if (::WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
-		return 0;
+	CoreGlobal::Create();
 
-	SOCKET clientSocket = ::socket(AF_INET, SOCK_STREAM, 0);
-	if (clientSocket == INVALID_SOCKET)
+	shared_ptr<ClientService> service = MakeShared<ClientService>
+		(
+			NetAddress(L"127.0.0.1", 7777),
+			MakeShared <IocpCore>(),
+			MakeShared<ServerSession>,
+			1
+		);
+
+	service->Start();
+
+	for (int i = 0; i < 2; i++)
+
 	{
-		int32 errCode = ::WSAGetLastError();
-		cout << "Socket ErroCode: " << errCode << endl;
-		return 0;
+		TM_M->Launch([=]()
+			{
+				while (true)
+				{
+					service->GetIocpCore()->Dispatch();
+				}
+			});
+
+
 	}
 
-	u_long on = 1;
-	if (::ioctlsocket(clientSocket, FIONBIO, &on) == INVALID_SOCKET) // 논블로킹 소켓 만드는 함수
-		return 0;
 
-	SOCKADDR_IN serverAddr;
-	::memset(&serverAddr, 0, sizeof(serverAddr));
-	serverAddr.sin_family = AF_INET;
-	::inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr);
-	serverAddr.sin_port = ::htons(7777);
 
-	this_thread::sleep_for(2s);
+	TM_M->Join();
 
-	// Connect
-	while (true)
-	{
-		auto connectValue = ::connect(clientSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr));
-		if (connectValue == SOCKET_ERROR)
-		{
-			// 블록상태였어야 했음(연결이 아직 되지 않았음)
-			if (::WSAGetLastError() == WSAEWOULDBLOCK)
-				continue;
 
-			// 이미 연결되어있음
-			if (::WSAGetLastError() == WSAEISCONN)
-				break;
 
-			// Error
+	SocketUtility::Clear();
+	CoreGlobal::Delete();
 
-			break;
-		}
-	}
+	return 0;
 
-	cout << "Connected to Server" << endl;
 
-	// - session -
-	char sendBuffer[100] = "Hello Server!";
-	// Overlapped
-	WSAEVENT wsaEvent = WSACreateEvent();
-	WSAOVERLAPPED overlapped = {};
-	overlapped.hEvent = wsaEvent;
-	// Recv
-	char recvBuffer[100] = "yo! ";
 
+
+
+
+
+
+
+
+
+	// 	 //we are question
+	//		 //who? gatAI! 
+
+	//WSAData wsaData;
+	//if (::WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
+	//	return 0;
+
+	//SOCKET clientSocket = ::socket(AF_INET, SOCK_STREAM, 0);
+	//if (clientSocket == INVALID_SOCKET)
+	//{
+	//	int32 errCode = ::WSAGetLastError();
+	//	cout << "Socket ErroCode: " << errCode << endl;
+	//	return 0;
+	//}
+
+	//u_long on = 1;
+	//if (::ioctlsocket(clientSocket, FIONBIO, &on) == INVALID_SOCKET) // 논블로킹 소켓 만드는 함수
+	//	return 0;
+
+	//SOCKADDR_IN serverAddr;
+	//::memset(&serverAddr, 0, sizeof(serverAddr));
+	//serverAddr.sin_family = AF_INET;
+	//::inet_pton(AF_INET, "127.0.0.1", &serverAddr.sin_addr);
+	//serverAddr.sin_port = ::htons(7777);
+
+	//this_thread::sleep_for(2s);
+
+	//// Connect
+	//while (true)
+	//{
+	//	auto connectValue = ::connect(clientSocket, (SOCKADDR*)&serverAddr, sizeof(serverAddr));
+	//	if (connectValue == SOCKET_ERROR)
+	//	{
+	//		// 블록상태였어야 했음(연결이 아직 되지 않았음)
+	//		if (::WSAGetLastError() == WSAEWOULDBLOCK)
+	//			continue;
+
+	//		// 이미 연결되어있음
+	//		if (::WSAGetLastError() == WSAEISCONN)
+	//			break;
+
+	//		// Error
+
+	//		break;
+	//	}
+	//}
+
+	//cout << "Connected to Server" << endl;
+
+	//// - session -
+	//char sendBuffer[100] = "Hello Server!";
 	//// Overlapped
 	//WSAEVENT wsaEvent = WSACreateEvent();
 	//WSAOVERLAPPED overlapped = {};
 	//overlapped.hEvent = wsaEvent;
+	//// Recv
+	//char recvBuffer[100] = "yo! ";
 
-	// Send
-	while (true)
-	{
-		WSABUF wsaBuf;
-		wsaBuf.buf = sendBuffer;
-		wsaBuf.len = sizeof(sendBuffer);
+	////// Overlapped
+	////WSAEVENT wsaEvent = WSACreateEvent();
+	////WSAOVERLAPPED overlapped = {};
+	////overlapped.hEvent = wsaEvent;
 
-		DWORD sendLen = 0;
-		DWORD flags = 0;
+	//// Send
+	//while (true)
+	//{
+	//	WSABUF wsaBuf;
+	//	wsaBuf.buf = sendBuffer;
+	//	wsaBuf.len = sizeof(sendBuffer);
 
-		// send
-		if (::WSASend(clientSocket, &wsaBuf, 1, &sendLen, flags, &overlapped, nullptr) == SOCKET_ERROR)
-		{
-			// WSARecv가실패
+	//	DWORD sendLen = 0;
+	//	DWORD flags = 0;
 
-			if (::WSAGetLastError() == WSA_IO_PENDING)
-			{
-				// Pending :: 보류하고 나중에 확인
-				::WSAWaitForMultipleEvents(1, &wsaEvent, TRUE, WSA_INFINITE, FALSE);
-				::WSAGetOverlappedResult(clientSocket, &overlapped, &sendLen, FALSE, &flags);
+	//	// send
+	//	if (::WSASend(clientSocket, &wsaBuf, 1, &sendLen, flags, &overlapped, nullptr) == SOCKET_ERROR)
+	//	{
+	//		// WSARecv가실패
 
-			}
-			else
-			{
-				// TODO : 문제가 있는 상황
-				break;
-			}
-		}
+	//		if (::WSAGetLastError() == WSA_IO_PENDING)
+	//		{
+	//			// Pending :: 보류하고 나중에 확인
+	//			::WSAWaitForMultipleEvents(1, &wsaEvent, TRUE, WSA_INFINITE, FALSE);
+	//			::WSAGetOverlappedResult(clientSocket, &overlapped, &sendLen, FALSE, &flags);
 
-		cout << "send Data! Len = " << sizeof(sendBuffer) << endl;
-		
-		// Recv
-		// 과제? 
-		//wsaBuf.buf = recvBuffer;
-		//wsaBuf.len = sizeof(recvBuffer);
+	//		}
+	//		else
+	//		{
+	//			// TODO : 문제가 있는 상황
+	//			break;
+	//		}
+	//	}
 
-		//DWORD recvLen = 0;
-		//
-		//if (WSARecv(clientSocket, &wsaBuf,1,&recvLen,&flags, &overlapped,nullptr) == SOCKET_ERROR)
-		//{
-		//	if (::WSAGetLastError() == WSA_IO_PENDING)
-		//	{
-		//		::WSAWaitForMultipleEvents(1, &wsaEvent, TRUE, WSA_INFINITE, FALSE);
-		//		::WSAGetOverlappedResult(clientSocket, &overlapped, &recvLen, FALSE, &flags);
-		//	}
-		//	else
-		//	{
-		//		// TODO : 문제가 있는 상황
-		//		break;
-		//	}
+	//	cout << "send Data! Len = " << sizeof(sendBuffer) << endl;
+	//	
+	//	// Recv
+	//	// 과제? 
+	//	//wsaBuf.buf = recvBuffer;
+	//	//wsaBuf.len = sizeof(recvBuffer);
 
-		//}
-		//cout << "recv Data! Len = " << sizeof(recvBuffer) << endl;
+	//	//DWORD recvLen = 0;
+	//	//
+	//	//if (WSARecv(clientSocket, &wsaBuf,1,&recvLen,&flags, &overlapped,nullptr) == SOCKET_ERROR)
+	//	//{
+	//	//	if (::WSAGetLastError() == WSA_IO_PENDING)
+	//	//	{
+	//	//		::WSAWaitForMultipleEvents(1, &wsaEvent, TRUE, WSA_INFINITE, FALSE);
+	//	//		::WSAGetOverlappedResult(clientSocket, &overlapped, &recvLen, FALSE, &flags);
+	//	//	}
+	//	//	else
+	//	//	{
+	//	//		// TODO : 문제가 있는 상황
+	//	//		break;
+	//	//	}
+
+	//	//}
+	//	//cout << "recv Data! Len = " << sizeof(recvBuffer) << endl;
 
 
-		this_thread::sleep_for(1s);
-	}
+	//	this_thread::sleep_for(1s);
+	//}
 
-	::closesocket(clientSocket);
-	::WSACloseEvent(wsaEvent);
-	::WSACleanup();
+	//::closesocket(clientSocket);
+	//::WSACloseEvent(wsaEvent);
+	//::WSACleanup();
 
 	// 10/ 29
 	//WSAData wsaData;
@@ -186,7 +267,12 @@ int main()
 
 	//cout << "Connected to Server" << endl;
 
-	//char sendBuffer[100] = "Hello World!";
+	//char sendBuffer[100] = "
+	// 
+	// 
+	// 
+	// 
+	// World!";
 
 	//// Send
 	//while (true)
