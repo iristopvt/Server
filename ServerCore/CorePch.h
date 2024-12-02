@@ -9,26 +9,28 @@
 
 using namespace std;
 
-// NetWork
-#include <WinSock2.h>
+// Network
+#include <winsock2.h>
 #include <MSWSock.h>
-#include <WS2tcpip.h>
-#pragma comment(lib,"ws2_32.lib")
+#include <ws2tcpip.h>
+#pragma comment(lib, "ws2_32.lib")
 
 #include "SocketUtility.h"
 
-
-//core
+// CORE
 #include "CoreTLS.h"
 #include "CoreGlobal.h"
 #include "CoreMacro.h"
 #include "MyContainer.h"
 
-
 // Multi Thread
 #include "ThreadManager.h"
 #include "Lock.h"
 
-// Memory
+// Memomry
 #include "Memory.h"
 #include "MemoryPool.h"
+
+// MyNetWork
+#include "SendBuffer.h"
+#include "Session.h"

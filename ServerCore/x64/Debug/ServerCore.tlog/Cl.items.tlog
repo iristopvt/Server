@@ -1,4 +1,6 @@
 C:\Users\zxcvb\Downloads\Server\ServerCore\Allocator.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\Allocator.obj
+C:\Users\zxcvb\Downloads\Server\ServerCore\BufferReader.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\BufferReader.obj
+C:\Users\zxcvb\Downloads\Server\ServerCore\BufferWriter.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\BufferWriter.obj
 C:\Users\zxcvb\Downloads\Server\ServerCore\CoreGlobal.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\CoreGlobal.obj
 C:\Users\zxcvb\Downloads\Server\ServerCore\CoreTLS.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\CoreTLS.obj
 C:\Users\zxcvb\Downloads\Server\ServerCore\DeadLockProfiler.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\DeadLockProfiler.obj
@@ -12,7 +14,9 @@ C:\Users\zxcvb\Downloads\Server\ServerCore\Memory.cpp;C:\Users\zxcvb\Downloads\S
 C:\Users\zxcvb\Downloads\Server\ServerCore\MemoryPool.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\MemoryPool.obj
 C:\Users\zxcvb\Downloads\Server\ServerCore\NetAddress.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\NetAddress.obj
 C:\Users\zxcvb\Downloads\Server\ServerCore\pch.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\pch.obj
+C:\Users\zxcvb\Downloads\Server\ServerCore\RecvBuffer.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\RecvBuffer.obj
 C:\Users\zxcvb\Downloads\Server\ServerCore\RefCounting.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\RefCounting.obj
+C:\Users\zxcvb\Downloads\Server\ServerCore\SendBuffer.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\SendBuffer.obj
 C:\Users\zxcvb\Downloads\Server\ServerCore\ServerCore.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\ServerCore.obj
 C:\Users\zxcvb\Downloads\Server\ServerCore\Service.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\Service.obj
 C:\Users\zxcvb\Downloads\Server\ServerCore\Session.cpp;C:\Users\zxcvb\Downloads\Server\ServerCore\x64\Debug\Session.obj

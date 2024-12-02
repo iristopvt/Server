@@ -1,6 +1,5 @@
 #pragma once
 
-
 class Session;
 class IocpObject;
 
@@ -9,8 +8,8 @@ enum class EventType : uint8
 	CONNECT,
 	ACCEPT,
 	RECV,
-	SEND
-
+	SEND,
+	DISCONNECT
 };
 
 // OVERLAPPED 정보는 운영체제가 만들어준다.
@@ -18,76 +17,75 @@ class IocpEvent : public OVERLAPPED
 {
 public:
 	IocpEvent(EventType type);
-// te
 
-	void			Init();
-	EventType		GetType() { return _eventType; }
-	
+	void		 Init();
+	EventType	 GetType() { return _eventType; }
 
 	shared_ptr<IocpObject> GetOwner() { return _owner; }
-	void				   SetOwner(shared_ptr<IocpObject> owner) { _owner = owner; }
+	void				   SetOwner(shared_ptr<IocpObject> owner)
+	{
+		_owner = owner;
+	}
+
 protected:
-	EventType _eventType; // RECV , SEND , ACCEPT
-	shared_ptr<IocpObject> _owner = nullptr;
+	EventType				_eventType; // RECV, SEND, ACCEPT
+	shared_ptr<IocpObject>	_owner = nullptr;
 };
 
-// -----------------------------------
-//				Connect
-// -----------------------------------
-
+// ------------------------
+//		 Connect
+// ------------------------
 class ConnectEvent : public IocpEvent
 {
 public:
 	ConnectEvent() : IocpEvent(EventType::CONNECT) {}
-
 };
 
-// -----------------------------------
-//				ACCEPT
-// -----------------------------------
-
-
-class AccepctEvent : public IocpEvent
+// ------------------------
+//		 DisConnect
+// ------------------------
+class DisConnectEvent : public IocpEvent
 {
 public:
-	AccepctEvent() : IocpEvent(EventType::ACCEPT) {}
+	DisConnectEvent() : IocpEvent(EventType::DISCONNECT) {}
+};
+
+// ------------------------
+//		 Accept
+// ------------------------
+class AcceptEvent : public IocpEvent
+{
+public:
+	AcceptEvent() : IocpEvent(EventType::ACCEPT) {}
 
 	void SetSession(shared_ptr<Session> session) { _session = session; }
 	shared_ptr<Session> GetSession() { return _session; }
 
-
 private:
-	// Owner = Listner
+	// Owner : Listner
 
-	//Client
+	// Client
 	shared_ptr<Session> _session = nullptr;
 };
 
-// -----------------------------------
-//				Recv
-// -----------------------------------
-
-
+// ------------------------
+//		 Recv
+// ------------------------
 class RecvEvent : public IocpEvent
 {
 public:
 	RecvEvent() : IocpEvent(EventType::RECV) {}
 
-	// Owner = Client
-
+	// Owner : Client
 };
 
-// -----------------------------------
-//				Send
-// -----------------------------------
-
+// ------------------------
+//		 Send
+// ------------------------
 class SendEvent : public IocpEvent
 {
 public:
 	SendEvent() : IocpEvent(EventType::SEND) {}
 
-
-	// Owner : Client
-
+	Vector<shared_ptr<class SendBuffer>> sendBuffers;
 };
-

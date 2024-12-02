@@ -1,11 +1,10 @@
 #pragma once
 
-//uint64 bitFlag = 0x0000'0000; //  bool이 여러가지있을때 한번에 하는 방법이 bitFlag
-// [wwwwwwww] [wwwwwwww] : Write Lock을 걸은 ThreadID를 기입
+// [WWWWWWWW] [WWWWWWWW] : Write Lock을 걸은 ThreadID를 기입
 // [RRRRRRRR] [RRRRRRRR] : Read Lock을 걸었을 때 몇번이나 걸었는지 횟수
-// [wwwwwwww] [wwwwwwww] [RRRRRRRR] [RRRRRRRR] => 32비트 플래그
-// W : Write Flag (상호베타적) Thread ID
-// R : Read Flag (공유) Shared Lock Count
+// [WWWWWWWW] [WWWWWWWW] [RRRRRRRR] [RRRRRRRR] => 32비트 플래그
+// W : Write Flag (상호배타적, Thread ID)
+// R : Read Flag (Shared Lock Count)
 
 class Lock
 {
@@ -27,11 +26,9 @@ public:
 private:
 	Atomic<uint32> _lockFlag = EMPTY_FLAG;
 	uint16 _writeCount = 0;
-
 };
 
-
-// RAII(Resource Acquisition Is Initialization) 패턴
+// RAII(Resource Acquisition IS Initialization) 패턴
 class ReadLockGuard
 {
 public:

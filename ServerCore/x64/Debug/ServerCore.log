@@ -1,4 +1,28 @@
-﻿  Service.cpp
+﻿  pch.cpp
+  Allocator.cpp
+  BufferReader.cpp
+  BufferWriter.cpp
+  CoreGlobal.cpp
+  CoreTLS.cpp
+  DeadLockProfiler.cpp
+  IocpCore.cpp
+  IocpEvent.cpp
+  Listener.cpp
+  Lock.cpp
+  LockBasedQueue.cpp
+  LockBasedStack.cpp
+  Memory.cpp
+  MemoryPool.cpp
+  NetAddress.cpp
+  RecvBuffer.cpp
+  RefCounting.cpp
+  SendBuffer.cpp
+  ServerCore.cpp
+  Service.cpp
+  코드를 생성하고 있습니다...
+  컴파일하고 있습니다...
   Session.cpp
+  SocketUtility.cpp
+  ThreadManager.cpp
   코드를 생성하고 있습니다...
   ServerCore.vcxproj -> C:\Users\zxcvb\Downloads\Server\Libraries\Debug\ServerCore.lib

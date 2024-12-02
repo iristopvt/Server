@@ -47,7 +47,6 @@
 //
 //using String = basic_string<char, char_traits<char>, STLAlloctor<char>>;
 //using WStirng = basic_string<wchar_t, char_traits<wchar_t>, STLAlloctor<char>>;
-
 #pragma once
 
 #include "Types.h"

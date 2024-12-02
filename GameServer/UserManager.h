@@ -1,5 +1,4 @@
 #pragma once
-
 struct User
 {
 	// User Info
@@ -10,7 +9,7 @@ class UserManager
 	USE_LOCK;
 private:
 	UserManager() {}
-	~UserManager(){}
+	~UserManager() {}
 
 public:
 	static void Create() { if (_instance == nullptr) _instance = new UserManager(); }
@@ -19,7 +18,6 @@ public:
 
 	User* GetUser(int32 id)
 	{
-		/*lock_guard<std::mutex> lg(_mutex);*/
 		WRITE_LOCK;
 
 		// userInfo 정보 추출
@@ -29,10 +27,6 @@ public:
 
 	void Save();
 
-
 private:
-
-	/*std::mutex _mutex;*/
 	static UserManager* _instance;
 };
-

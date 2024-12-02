@@ -1,14 +1,12 @@
 #include "pch.h"
 #include "Service.h"
 
-
 Service::Service(ServiceType type, NetAddress address, shared_ptr<IocpCore> core, SessionFactory factory, int32 maxSessionCount)
     : _type(type)
     , _netAddress(address)
-    ,_iocpCore(core)
-    ,_sessionFactory(factory)
-    ,_maxSessionCount(maxSessionCount)
-    
+    , _iocpCore(core)
+    , _sessionFactory(factory)
+    , _maxSessionCount(maxSessionCount)
 {
 }
 
@@ -23,7 +21,7 @@ bool Service::Start()
 
 void Service::CloseService()
 {
-    //TODO
+    // TODO
 }
 
 shared_ptr<Session> Service::CreateSession()
@@ -40,16 +38,14 @@ shared_ptr<Session> Service::CreateSession()
 void Service::AddSession(shared_ptr<Session> session)
 {
     WRITE_LOCK
-    
-    _sessionCount++;
+        _sessionCount++;
     _sessions.insert(session);
-
 }
 
 void Service::ReleaseSession(shared_ptr<Session> session)
 {
     WRITE_LOCK;
-   // ASSERT_CRASH(_sessions.erase(session) != 0);
+    ASSERT_CRASH(_sessions.erase(session) != 0);
     _sessionCount--;
 }
 
@@ -65,36 +61,30 @@ ClientService::~ClientService()
 
 bool ClientService::Start()
 {
-
     if (CanStart() == false)
         return false;
 
     const int32 sessionCount = GetMaxSessionCount();
 
-    for (int i = 0; i < sessionCount; i++)
+    for (int32 i = 0; i < sessionCount; i++)
     {
         shared_ptr<Session> session = CreateSession();
         // TODO : Connect!!
         session->SetService(shared_from_this());
         session->Connect();
-
-       
     }
-
-
 
     return true;
 }
 
 ServerService::ServerService(NetAddress target, shared_ptr<IocpCore> core, SessionFactory factory, int32 maxSessionCount)
-    : Service(ServiceType::SERVER,target,core,factory,maxSessionCount)
+    : Service(ServiceType::SERVER, target, core, factory, maxSessionCount)
 {
-    
 }
 
 ServerService::~ServerService()
 {
-    //TODO
+    // TODO
 }
 
 bool ServerService::Start()
@@ -115,8 +105,6 @@ bool ServerService::Start()
 
 void ServerService::CloseService()
 {
-
     // TODO
     Service::CloseService();
-
 }

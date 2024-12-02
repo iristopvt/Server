@@ -1,8 +1,8 @@
 #pragma once
+
 class ThreadManager;
 class DeadLockProfiler;
 class Memory;
-class IocpEvent;
 class IocpCore;
 
 class CoreGlobal
@@ -35,15 +35,13 @@ public:
 	}
 
 	ThreadManager* GetThreadManager() { return _threadManager; }
-	DeadLockProfiler* GetDeadLockProfiler() { return _deadLockProfinler; }
+	DeadLockProfiler* GetDeadLockProfiler() { return _deadLockProfiler; }
 	Memory* GetMemory() { return _memory; }
 
 private:
 	static CoreGlobal* _instance;
 
-	class ThreadManager*	_threadManager;
-	DeadLockProfiler*		_deadLockProfinler;
+	ThreadManager* _threadManager;
+	DeadLockProfiler* _deadLockProfiler;
 	Memory* _memory;
-
 };
-

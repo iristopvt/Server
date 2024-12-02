@@ -247,7 +247,7 @@
 //			//this_thread::yield(); 이것은 양보
 //
 //		}
-//
+
 //	}
 //
 //	void unlock()
@@ -1255,58 +1255,29 @@
 #pragma comment(lib, "ws2_32.lib") // 위에 선언한 헤더파일들을 가져다 쓰기위한 링크 
 
 #include "Service.h"
+#include "GameSession.h"
+#include "GameSessionManager.h"
 
-class GameSession : public Session
-{
-public:
-	GameSession()
-	{
-		string temp = "Hello Client, Im Server";
-		::memcpy(_sendBuffer, temp.data(), temp.size());
-	}
+// GameSession : 서버에서 클라이언트가 접속하면 안내할 시탁
+// GameSessionManger : 모든 클라이언트가 앉아있는 식탁들을 관리하는 수단 
 
-	virtual void OnConnected() override
-	{
-		cout << "클라이언트가 서버에 접속 성공!! " << endl;
-		Send(reinterpret_cast<BYTE*>(_sendBuffer), 1000);
-	}
-
-	virtual int32 OnRecv(BYTE* buffer, int32 len) override
-	{
-		char* str = reinterpret_cast<char*>(buffer);
-
-		cout << "Recv : " << str << endl;
-
-		return len;
-	}
-
-	virtual void Onsend(int32 len)  override
-	{
-		cout << "Send 성공 : " << len << endl;
-	}
-	virtual void DisConnected() override
-	{
-		cout << "DisConnected" << endl;
-	}
-};
 
 int main()
 {
-
 	CoreGlobal::Create();
+	G_GameSessionManager = new GameSessionManager();
 
 	shared_ptr<ServerService> service = MakeShared<ServerService>
-	(
-		NetAddress(L"127.0.0.1",7777),
-		MakeShared <IocpCore>(),
-		MakeShared<GameSession>,
-		100
-	);
+		(
+			NetAddress(L"127.0.0.1", 7777),
+			MakeShared<IocpCore>(),
+			MakeShared<GameSession>,
+			100
+		);
 
 	service->Start();
 
 	for (int i = 0; i < 5; i++)
-
 	{
 		TM_M->Launch([=]()
 			{
@@ -1315,17 +1286,13 @@ int main()
 					service->GetIocpCore()->Dispatch();
 				}
 			});
-
-
 	}
-	
 
 
 	TM_M->Join();
 
+	//delete G_GameSessionManager;
 
-
-	SocketUtility::Clear();
 	CoreGlobal::Delete();
 
 	return 0;

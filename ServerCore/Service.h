@@ -16,30 +16,30 @@ enum class ServiceType : uint8
 
 class Service : public enable_shared_from_this<Service>
 {
-
 public:
 	Service(ServiceType type, NetAddress address, shared_ptr<IocpCore> core, SessionFactory factory, int32 maxSessionCount = 1);
 	virtual ~Service();
 
-	// Session 생성 방법 
-	virtual bool Start() abstract;
-	bool CanStart() { return _sessionFactory != nullptr; }
-	virtual void CloseService();
-	void SetSessionFactory(SessionFactory func) { _sessionFactory = func; }
+	// 세션 생성 방법
+	virtual bool			Start() abstract;
+	bool					CanStart() { return _sessionFactory != nullptr; }
+	virtual void			CloseService();
+	void					SetSessionFactory(SessionFactory func) { _sessionFactory = func; }
+
 
 	// Session 관리
-	shared_ptr<Session> CreateSession();
-	void AddSession(shared_ptr<Session> session);
-	void ReleaseSession(shared_ptr<Session> session);
+	shared_ptr<Session>		CreateSession();
+	void					AddSession(shared_ptr<Session> session);
+	void					ReleaseSession(shared_ptr<Session> session);
 
-	int32 GetCurSessionCount() { return _sessionCount; }
-	int32 GetMaxSessionCount() { return _maxSessionCount; }
+	int32					GetCurSessionCount() { return _sessionCount; }
+	int32					GetMaxSessionCount() { return _maxSessionCount; }
 
-	ServiceType	GetServiceType() { return _type; }
-	NetAddress	GetNetAddress() { return _netAddress; }
+	ServiceType				GetServiceType() { return _type; }
+	NetAddress				GetNetAddress() { return _netAddress; }
 	shared_ptr<IocpCore>& GetIocpCore() { return _iocpCore; }
 
-private:
+protected:
 	USE_LOCK;
 
 	ServiceType _type;
@@ -49,17 +49,16 @@ private:
 	Set<shared_ptr<Session>> _sessions;
 	int32 _sessionCount = 0;
 	int32 _maxSessionCount = 0;
-	SessionFactory _sessionFactory; // session을 만들 때 쓰는 함수 
+	SessionFactory _sessionFactory; // session을 만들 때 쓰는 함수
 };
 
 class ClientService : public Service
 {
 public:
-	ClientService(NetAddress target, shared_ptr<IocpCore> core, SessionFactory factory, int32 maxSessionCount =1 );
+	ClientService(NetAddress target, shared_ptr<IocpCore> core, SessionFactory factory, int32 maxSessionCount = 1);
 	virtual ~ClientService();
 
 	virtual bool Start() override;
-
 };
 
 class ServerService : public Service
@@ -73,5 +72,4 @@ public:
 
 private:
 	shared_ptr<class Listener> _listener = nullptr;
-
 };

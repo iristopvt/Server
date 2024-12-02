@@ -1,7 +1,6 @@
 #pragma once
 class ThreadManager
 {
-
 public:
 	ThreadManager();
 	~ThreadManager();
@@ -17,6 +16,4 @@ private:
 
 	Mutex _lock;
 	vector<thread> _threads;
-
 };
-

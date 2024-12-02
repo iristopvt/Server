@@ -5,8 +5,8 @@
 class SocketUtility
 {
 public:
-	// TODO : 비동기 AcceptEx, 등등...
-	static LPFN_CONNECTEX ConnectEx;
+	// TODO : 비동기 AccpetEx, 등등..
+	static LPFN_CONNECTEX	ConnectEx;
 	static LPFN_DISCONNECTEX DisConnectEx;
 	static LPFN_ACCEPTEX AcceptEx;
 
@@ -29,14 +29,10 @@ public:
 	static bool BindAnyAddress(SOCKET socket, uint16 port);
 	static bool Listen(SOCKET socket, int32 backLog = SOMAXCONN);
 	static void Close(SOCKET& socket);
-
-
 };
 
 template<typename T>
 static inline bool SetSockOpt(SOCKET socket, int32 level, int32 optName, T optValue)
 {
-	return SOCKET_ERROR != ::setsockopt(socket, level, optName, reinterpret_cast<char*> (&optValue), sizeof(T));
+	return SOCKET_ERROR != ::setsockopt(socket, level, optName, reinterpret_cast<char*>(&optValue), sizeof(T));
 }
-
-

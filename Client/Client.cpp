@@ -1,10 +1,9 @@
 ﻿#include "pch.h"
 
-// sokect 만들기
+// Socket 만들기
 // - ipv6
 // - port
 // - protocol
-
 
 #include <WinSock2.h>
 #include <MSWSock.h>
@@ -13,31 +12,53 @@
 #pragma comment(lib,"ws2_32.lib")
 
 #include "Service.h"
+#include "BufferReader.h"
+#include "BufferWriter.h"
+#include "ClientPacketHandler.h"
+struct Player
+{
+	int32 mesh;
+	int32 material;
 
-class ServerSession : public Session
+	int64 id;
+	int32 hp;
+	int16 atk;
+};
+
+class ServerSession : public PacketSession
 {
 public:
 	ServerSession()
 	{
-		string temp = "Hellp Server!! Im Client";
-		::memcpy(_sendBuffer, temp.data(), temp.size());
 	}
+
+	~ServerSession()
+	{
+		cout << "Session DisConnected" << endl;
+	}
+
 	virtual void OnConnected() override
 	{
-		cout << "Server에 접속 성공!! " << endl;
+		cout << "Server에 접속 성공!!!" << endl;
+
+		//shared_ptr<SendBuffer> sendBuf = make_shared<SendBuffer>(100);
+		//string temp = "Hello Server!! I'm Client";
+		//sendBuf->CopyData((void*)temp.data(), temp.size());
+		//Send(sendBuf);
 	}
-	virtual int32 OnRecv(BYTE* buffer, int32 len) override 
-	{ 
-		cout << buffer << endl;
-		
-		Send(reinterpret_cast<BYTE*>(_sendBuffer), 1000);
-		
-		return len; 
+
+	virtual int32 OnRecvPacket(BYTE* buffer, int32 len) override
+	{
+		ClientPacketHandler::HandlePacket(buffer, len);
+
+		return len;
 	}
-	virtual void Onsend(int32 len)  override
+
+	virtual void OnSend(int32 len) override
 	{
 		cout << "Send 성공 : " << len << endl;
 	}
+
 	virtual void DisConnected() override
 	{
 		cout << "DisConnected" << endl;
@@ -53,7 +74,7 @@ int main()
 	shared_ptr<ClientService> service = MakeShared<ClientService>
 		(
 			NetAddress(L"127.0.0.1", 7777),
-			MakeShared <IocpCore>(),
+			MakeShared<IocpCore>(),
 			MakeShared<ServerSession>,
 			1
 		);
@@ -61,7 +82,6 @@ int main()
 	service->Start();
 
 	for (int i = 0; i < 2; i++)
-
 	{
 		TM_M->Launch([=]()
 			{
@@ -70,28 +90,15 @@ int main()
 					service->GetIocpCore()->Dispatch();
 				}
 			});
-
-
 	}
-
 
 
 	TM_M->Join();
 
-
-
-	SocketUtility::Clear();
 	CoreGlobal::Delete();
 
 	return 0;
-
-
-
-
-
-
-
-
+}
 
 
 
@@ -311,7 +318,7 @@ int main()
 
 	//::closesocket(clientSocket);
 	//::WSACleanup();
-}
+
 
 	//while (true)
 	//{
