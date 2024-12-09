@@ -1,0 +1,33 @@
+﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2176,5): warning : The referenced project 'C:\Users\zxcvb\Downloads\Server\protobuf-3.20.2\protobuf-3.20.2\solu\ZERO_CHECK.vcxproj' does not exist.
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2176,5): warning : The referenced project 'C:\Users\zxcvb\Downloads\Server\protobuf-3.20.2\protobuf-3.20.2\solu\libprotobuf.vcxproj' does not exist.
+  Building Custom Rule C:/Users/zxcvb/Downloads/Server/protobuf-3.20.2/protobuf-3.20.2/cmake/CMakeLists.txt
+  CMake is re-running because C:/Users/zxcvb/Downloads/Server/protobuf-3.20.2/protobuf-3.20.2/solu/CMakeFiles/generate.stamp dependency file is missing.
+  CMake Deprecation Warning at CMakeLists.txt:2 (cmake_minimum_required):
+    Compatibility with CMake < 3.10 will be removed from a future version of
+    CMake.
+  
+    Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+    to tell CMake that the project requires at least <min> but has been updated
+    to work with policies introduced by <max> or earlier.
+  
+  
+  -- Selecting Windows SDK version 10.0.22621.0 to target Windows 10.0.19045.
+  -- 
+  -- 3.20.2.0
+  -- Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR) 
+  CMake Error at tests.cmake:11 (message):
+    Cannot find third_party/googletest directory that's needed to build tests.
+    If you use git, make sure you have cloned submodules:
+  
+      git submodule update --init --recursive
+  
+    If instead you want to skip tests, run cmake with:
+  
+      cmake -Dprotobuf_BUILD_TESTS=OFF
+  
+  Call Stack (most recent call first):
+    CMakeLists.txt:325 (include)
+  
+  
+  -- Configuring incomplete, errors occurred!
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(254,5): error MSB8066: 'C:\Users\zxcvb\Downloads\Server\protobuf-3.20.2\protobuf-3.20.2\cmake\CMakeLists.txt'에 대한 사용자 지정 빌드가 종료되었습니다(코드 1).

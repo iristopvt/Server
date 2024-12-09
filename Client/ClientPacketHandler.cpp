@@ -7,7 +7,7 @@ void ClientPacketHandler::HandlePacket(BYTE* buffer, int32 len)
 {
 	// TODO : Recv했을 때 패킷 파싱하고 분석
 	BufferReader br(buffer, len);
-	int32 t = sizeof(PlayerInfo_Protocol);
+	int32 t = sizeof(PlayerInfo_Packet);
 	PacketHeader header;
 	br.Peek(&header);
 
@@ -33,34 +33,29 @@ void ClientPacketHandler::Handle_C_TEST(BYTE* buffer, int32 len)
 {
 	BufferReader br(buffer, len);
 
-	PlayerInfo_Protocol pkt;
-	br >> pkt;
+	PlayerInfo_Packet* pkt = reinterpret_cast<PlayerInfo_Packet*>(buffer);
 
-	if (pkt.IsValid() == false)
+	if (pkt->IsValid() == false)
 		return;
 
-	vector<BuffData> buffDataes;
-	buffDataes.resize(pkt.buffCount);
-	for (int i = 0; i < pkt.buffCount; i++)
-	{
-		br >> buffDataes[i];
-	}
-
-	wstring name;
-	name.resize(pkt.nameCount);
-	for (int i = 0; i < pkt.nameCount; i++)
-	{
-		br >> name[i];
-	}
-
-	wcout.imbue(std::locale("kor"));
-	wcout << name << endl;
+	PlayerInfo_Packet::BuffList buffDataes = pkt->GetBuffList();
 
 	cout << "BuffCount : " << buffDataes.size() << endl;
-	for (auto buff : buffDataes)
+
+	for (auto& buff : buffDataes)
 	{
 		cout << "BuffId : " << buff.buffId << "  /   BuffRemain : " << buff.remainTime << endl;
+
+		PlayerInfo_Packet::VictimList victims = pkt->GetVictimList(&buff);
+		cout << "victim count : " << buff.victimCount << endl;
+		for (auto& victim : victims)
+		{
+			cout << "Victim : " << victim << endl;
+		}
 	}
+
+	PlayerInfo_Packet::Name wCharList = pkt->GetWcharList();
+	wcout << (WCHAR*)&wCharList[0] << endl;
 }
 
 shared_ptr<SendBuffer> ClientPacketHandler::Make_C_TEST(int64 id, int32 hp, int16 atk, vector<BuffData> buffs)

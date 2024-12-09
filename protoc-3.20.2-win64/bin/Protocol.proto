@@ -1,0 +1,21 @@
+syntax = "proto3";
+package Protocol;
+
+message BuffData
+{
+	uint32 buffId = 1;
+	float remainTime = 2;
+
+	repeated uint32 victims = 3;
+}
+
+message S_PlayerInfo
+{
+	
+	uint64 id = 1;
+	uint32 hp = 2;
+	uint32 atk = 3;
+
+	repeated BuffData buffs =4;
+}
+

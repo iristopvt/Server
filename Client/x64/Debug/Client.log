@@ -1,10 +1,1 @@
-﻿  Client.cpp
-  ClientPacketHandler.cpp
-C:\Users\zxcvb\Downloads\Server\Client\ClientPacketHandler.cpp(44,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-  (소스 파일 '/ClientPacketHandler.cpp'을(를) 컴파일하는 중)
-  
-C:\Users\zxcvb\Downloads\Server\Client\ClientPacketHandler.cpp(51,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-  (소스 파일 '/ClientPacketHandler.cpp'을(를) 컴파일하는 중)
-  
-  코드를 생성하고 있습니다...
-  Client.vcxproj -> C:\Users\zxcvb\Downloads\Server\Binary\Debug\Client.exe
+﻿LINK : fatal error LNK1104: 'Libs\ServerCore\Debug\ServerCore.lib' 파일을 열 수 없습니다.

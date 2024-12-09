@@ -16,23 +16,43 @@ void GameSession::OnConnected()
 {
 	// 입장하면 입장해있던 모든 클라이언트들에게 입장했다고 방송고지
 
-	// shared_ptr<SendBuffer> buf = make_shared<SendBuffer>(100);
-	// string temp = "client entered!!!";
-	// 
-	// BYTE* buffer = buf->Buffer();
-	// ((PacketHeader*)buffer)->id = 1; // id : 1 이면 Hello MSG
-	// ((PacketHeader*)buffer)->size = (sizeof(temp) + sizeof(PacketHeader));
-	// 
-	// // sendBuffer의 writePos에 접근 불가
-	// // ::memcpy(&buffer[4], temp.data(), sizeof(temp));
-	// buf->CopyData_Packet((BYTE*)temp.data(), sizeof(temp));
+	//////////////////
+	/// Packet 제작 //
+	//////////////////
+	//PKT_S_TEST_WRITE pkt_writer(1234, 10, 5);
+	//auto buffList = pkt_writer.ReserveBuffList(2);
+	//auto wCharList = pkt_writer.Reserve_WCHARList(6);
 
-	vector<BuffData> buffs;
-	buffs.push_back({ 1,48.0f });
-	buffs.push_back({ 2,2.0f });
+	//// buff
+	//{
+	//	buffList[0] = { 241203, 6 };
+	//	auto victimList0 = pkt_writer.ReserveVictimList(&buffList[0], 2);
+	//	{
+	//		victimList0[0] = 100;
+	//		victimList0[1] = 101;
+	//	}
 
-	shared_ptr<SendBuffer> sendBuffer = ServerPacketHandler::Make_S_TEST(1234, 10, 5, buffs,L"Cherol");
-	G_GameSessionManager->BroadCast(sendBuffer);
+	//	buffList[1] = { 240528, 23 };
+	//	auto victimList1 = pkt_writer.ReserveVictimList(&buffList[1], 4);
+	//	{
+	//		victimList1[0] = 614;
+	//		victimList1[1] = 622;
+	//		victimList1[2] = 1109;
+	//		victimList1[3] = 1211;
+	//	}
+	//}
+
+	//// name
+	//{
+	//	wCharList[0] = L'H';
+	//	wCharList[1] = L'a';
+	//	wCharList[2] = L'n';
+	//	wCharList[3] = L'i';
+	//	wCharList[4] = L'l';
+	//	wCharList[5] = L'\0';
+	//}
+
+	//G_GameSessionManager->BroadCast(pkt_writer.Ready());
 
 	G_GameSessionManager->Add(static_pointer_cast<GameSession>(shared_from_this()));
 }
@@ -48,6 +68,8 @@ int32 GameSession::OnRecvPacket(BYTE* buffer, int32 len)
 	PacketHeader header = *((PacketHeader*)buffer);
 
 	cout << "Paket ID : " << header.id << "  Size : " << header.size << endl;
+
+	ServerPacketHandler::HandlePacket(buffer, len);
 
 	return len;
 }
