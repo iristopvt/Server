@@ -1,0 +1,11 @@
+﻿  pch.cpp
+  Client.cpp
+  ClientPacketHandler.cpp
+  Player.cpp
+  ServerSession.cpp
+  Protocol.pb.cc
+  코드를 생성하고 있습니다.
+  Previous IPDB not found, fall back to full compilation.
+  All 1992 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  코드를 생성했습니다.
+  Client.vcxproj -> C:\Users\zxcvb\Downloads\11\Binary\Release\Client.exe

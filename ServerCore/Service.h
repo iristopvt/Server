@@ -2,6 +2,7 @@
 
 #include "NetAddress.h"
 #include "IocpCore.h"
+#include "SendBuffer.h"
 #include "Listener.h"
 #include "Session.h"
 #include <functional>
@@ -20,14 +21,14 @@ public:
 	Service(ServiceType type, NetAddress address, shared_ptr<IocpCore> core, SessionFactory factory, int32 maxSessionCount = 1);
 	virtual ~Service();
 
-	// ì„¸ì…˜ ìƒì„± ë°©ë²•
+	// ¼¼¼Ç »ı¼º ¹æ¹ı
 	virtual bool			Start() abstract;
 	bool					CanStart() { return _sessionFactory != nullptr; }
 	virtual void			CloseService();
 	void					SetSessionFactory(SessionFactory func) { _sessionFactory = func; }
+	
 
-
-	// Session ê´€ë¦¬
+	// Session °ü¸®
 	shared_ptr<Session>		CreateSession();
 	void					AddSession(shared_ptr<Session> session);
 	void					ReleaseSession(shared_ptr<Session> session);
@@ -37,7 +38,10 @@ public:
 
 	ServiceType				GetServiceType() { return _type; }
 	NetAddress				GetNetAddress() { return _netAddress; }
-	shared_ptr<IocpCore>& GetIocpCore() { return _iocpCore; }
+	shared_ptr<IocpCore>&	GetIocpCore() { return _iocpCore; }
+
+	// Send
+	void BroadCast(shared_ptr<class SendBuffer> buffer);
 
 protected:
 	USE_LOCK;
@@ -49,7 +53,7 @@ protected:
 	Set<shared_ptr<Session>> _sessions;
 	int32 _sessionCount = 0;
 	int32 _maxSessionCount = 0;
-	SessionFactory _sessionFactory; // sessionì„ ë§Œë“¤ ë•Œ ì“°ëŠ” í•¨ìˆ˜
+	SessionFactory _sessionFactory; // sessionÀ» ¸¸µé ¶§ ¾²´Â ÇÔ¼ö
 };
 
 class ClientService : public Service

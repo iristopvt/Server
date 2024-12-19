@@ -8,9 +8,9 @@ LPFN_ACCEPTEX       SocketUtility::AcceptEx = nullptr;
 void SocketUtility::Init()
 {
     WSAData wsaData;
-    ASSERT_CRASH(::WSAStartup(MAKEWORD(2, 2), OUT & wsaData) == 0);
+    ASSERT_CRASH(::WSAStartup(MAKEWORD(2, 2), OUT &wsaData) == 0);
 
-    // ëŸ°íƒ€ì„ì— ì£¼ì†Œ ì–»ì–´ì˜¤ëŠ” API
+    // ·±Å¸ÀÓ¿¡ ÁÖ¼Ò ¾ò¾î¿À´Â API
     SOCKET dummySocket = CreateSocket();
     BindWindowsFunction(dummySocket, WSAID_CONNECTEX, reinterpret_cast<LPVOID*>(&ConnectEx));
     BindWindowsFunction(dummySocket, WSAID_DISCONNECTEX, reinterpret_cast<LPVOID*>(&DisConnectEx));
@@ -64,7 +64,7 @@ bool SocketUtility::SetTCPNoDelay(SOCKET socket, bool flag)
     return SetSockOpt(socket, SOL_SOCKET, TCP_NODELAY, flag);
 }
 
-// ListenSocketì˜ ì˜µì…˜ì„ ê·¸ëŒ€ë¡œ Clientì†Œì¼“ì— ì ìš©
+// ListenSocketÀÇ ¿É¼ÇÀ» ±×´ë·Î Client¼ÒÄÏ¿¡ Àû¿ë
 bool SocketUtility::SetUpdateAcceptSocket(SOCKET socket, SOCKET listenSocket)
 {
     return SetSockOpt(socket, SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT, listenSocket);
@@ -92,7 +92,7 @@ bool SocketUtility::Listen(SOCKET socket, int32 backLog)
 
 void SocketUtility::Close(SOCKET& socket)
 {
-    if (socket != INVALID_SOCKET)
+    if(socket != INVALID_SOCKET)
         ::closesocket(socket);
     socket = INVALID_SOCKET;
 }

@@ -12,7 +12,7 @@ enum class EventType : uint8
 	DISCONNECT
 };
 
-// OVERLAPPED ì •ë³´ëŠ” ìš´ì˜ì²´ì œê°€ ë§Œë“¤ì–´ì¤€ë‹¤.
+// OVERLAPPED Á¤º¸´Â ¿î¿µÃ¼Á¦°¡ ¸¸µé¾îÁØ´Ù.
 class IocpEvent : public OVERLAPPED
 {
 public:
@@ -22,9 +22,9 @@ public:
 	EventType	 GetType() { return _eventType; }
 
 	shared_ptr<IocpObject> GetOwner() { return _owner; }
-	void				   SetOwner(shared_ptr<IocpObject> owner)
+	void				   SetOwner(shared_ptr<IocpObject> owner) 
 	{
-		_owner = owner;
+		_owner = owner; 
 	}
 
 protected:
@@ -63,7 +63,7 @@ public:
 
 private:
 	// Owner : Listner
-
+	
 	// Client
 	shared_ptr<Session> _session = nullptr;
 };

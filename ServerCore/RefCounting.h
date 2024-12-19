@@ -19,7 +19,7 @@ public:
 
 		return refCount;
 	}
-
+	
 
 private:
 	atomic<int32> _refCount;
@@ -31,7 +31,7 @@ class TSharedPtr
 public:
 	TSharedPtr() {}
 	TSharedPtr(T* ptr) { Set(ptr); }
-
+	
 	TSharedPtr(const TSharedPtr& other) { Set(other._ptr); }
 	TSharedPtr(TSharedPtr&& rv) { _ptr = rv._ptr; rv._ptr = nullptr; }
 
@@ -67,9 +67,9 @@ public: // 연산자 오버로딩
 	bool operator==(T* ptr) const { return _ptr == ptr; }
 	bool operator!=(T* ptr) const { return _ptr != ptr; }
 	bool operator<(const TSharedPtr& other) const { return _ptr < other._ptr; }
-	T* operator*() { return _ptr; }
+	T*	 operator*() { return _ptr; }
 	const T* operator*() const { return _ptr; }
-	T* operator->() { return _ptr; }
+	T*	 operator->() { return _ptr; }
 	const T* operator->() const { return _ptr; }
 
 	bool IsNull() { return _ptr == nullptr; }
@@ -78,7 +78,7 @@ private:
 	void Set(T* ptr)
 	{
 		_ptr = ptr;
-		if (ptr)
+		if(ptr)
 			ptr->AddRef();
 	}
 
@@ -95,3 +95,4 @@ private:
 	// T... 제일 선조는 RefCountable이 와야한다.
 	T* _ptr = nullptr;
 };
+

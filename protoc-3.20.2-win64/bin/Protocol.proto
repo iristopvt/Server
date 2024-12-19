@@ -9,13 +9,40 @@ message BuffData
 	repeated uint32 victims = 3;
 }
 
-message S_PlayerInfo
+message S_Playerinfo
 {
-	
 	uint64 id = 1;
 	uint32 hp = 2;
 	uint32 atk = 3;
 
-	repeated BuffData buffs =4;
+	repeated BuffData buffs = 4;
 }
 
+message C_Playerinfo
+{
+	string name = 1;
+	uint64 id = 2;
+	uint32 hp = 3;
+	uint32 atk = 4;
+
+}
+
+message S_EnterRoom
+{
+	// DB 상 플레이어의 아이디
+	bool success =1;
+
+}
+
+message C_ChatMsg
+{
+	uint64 id = 1;
+	string msg = 2;
+
+}
+
+message S_ChatMsg
+{
+	string name = 1;
+	string msg = 2;
+}

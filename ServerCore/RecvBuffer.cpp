@@ -2,7 +2,7 @@
 #include "RecvBuffer.h"
 
 RecvBuffer::RecvBuffer(int32 bufferSize)
-	: _bufferSize(bufferSize)
+: _bufferSize(bufferSize)
 {
 	_capacity = bufferSize * BUFF_COUNT; // 1000
 	_buffer.resize(_capacity);
@@ -18,12 +18,12 @@ void RecvBuffer::Clean()
 
 	if (dataSize == 0)
 	{
-		// ë”± ì½ê¸° + ì“°ê¸° ì»¤ì„œê°€ ë™ì¼í•œ ìœ„ì¹˜. => ë‘˜ ë‹¤ ë¦¬ì…‹
+		// µü ÀÐ±â + ¾²±â Ä¿¼­°¡ µ¿ÀÏÇÑ À§Ä¡. => µÑ ´Ù ¸®¼Â
 		_readPos = _writePos = 0;
 	}
 	else
 	{
-		// ì—¬ìœ  ê³µê°„ì„ ì²´í¬í•´ì„œ ë²„í¼ 1ê°œ í¬ê¸° ë¯¸ë§Œì´ë©´, ë°ì´í„°ë¥¼ ì•žìœ¼ë¡œ ë•¡ê¸´ë‹¤.
+		// ¿©À¯ °ø°£À» Ã¼Å©ÇØ¼­ ¹öÆÛ 1°³ Å©±â ¹Ì¸¸ÀÌ¸é, µ¥ÀÌÅÍ¸¦ ¾ÕÀ¸·Î ¶¯±ä´Ù.
 		if (FreeSize() < _bufferSize)
 		{
 			::memcpy(&_buffer[0], &_buffer[_readPos], dataSize);
@@ -35,7 +35,7 @@ void RecvBuffer::Clean()
 
 bool RecvBuffer::OnRead(int32 numOfBytes)
 {
-	if (numOfBytes > DataSize())
+	if(numOfBytes > DataSize())
 		return false;
 
 	_readPos += numOfBytes;
@@ -44,7 +44,7 @@ bool RecvBuffer::OnRead(int32 numOfBytes)
 
 bool RecvBuffer::OnWrite(int32 numOfBytes)
 {
-	if (numOfBytes > FreeSize())
+	if(numOfBytes > FreeSize())
 		return false;
 
 	_writePos += numOfBytes;

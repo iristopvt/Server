@@ -1,5 +1,8 @@
 #pragma once
-////////////////
+
+#include "Protocol.pb.h"
+
+/////////////////
 // Packet List //
 /////////////////
 template<typename T, typename C>
@@ -9,14 +12,14 @@ public:
 	PacketList_Iterator(C& container, uint16 index) : _container(container), _index(index) {}
 
 	bool			operator!=(const PacketList_Iterator& other) { return _index != other._index; }
-	const T& operator*() const { return _container[_index]; }
-	T& operator*() { return _container[_index]; }
-	T* operator->() { return &_container[_index]; }
+	const T&		operator*() const { return _container[_index]; }
+	T&				operator*() { return _container[_index]; }
+	T*				operator->() { return &_container[_index]; }
 	PacketList_Iterator& operator++() { _index++; return *this; }
 	PacketList_Iterator operator++(int32) { PacketList_Iterator temp = *this; _index++; return temp; }
 
 private:
-	C& _container;
+	C&		_container;
 	uint16	_index;
 };
 
@@ -34,7 +37,7 @@ public:
 	}
 
 	uint16 size() { return _count; }
-	PacketList_Iterator<T, PacketList<T>> begin() { return PacketList_Iterator<T, PacketList<T>>(*this, 0); }
+	PacketList_Iterator<T, PacketList<T>> begin() { return PacketList_Iterator<T,PacketList<T>>(*this, 0); }
 	PacketList_Iterator<T, PacketList<T>> end() { return PacketList_Iterator<T, PacketList<T>>(*this, _count); }
 
 private:
@@ -42,11 +45,15 @@ private:
 	uint16		 _count;
 };
 
-// ê·œì•½
 enum PacketID
 {
 	NONE,
-	S_TEST = 1,
+	S_PLAYER_INFO = 1,
+	S_ENTEROOM = 2,
+	S_CHATMSG = 3,
+
+	C_PLAYER_INFO = 101,
+	C_CHATMSG = 102
 };
 
 enum BuffID
@@ -67,7 +74,7 @@ struct BuffData
 
 	bool Validate(BYTE* packetStart, uint16 packetSize, OUT uint32& size)
 	{
-		if (victimOffset + victimCount * sizeof(int32) > packetSize)
+		if(victimOffset + victimCount * sizeof(int32) > packetSize)
 			return false;
 
 		size += victimCount * sizeof(int32);
@@ -78,17 +85,17 @@ struct BuffData
 #pragma pack(1)
 struct PlayerInfo_Packet
 {
-	// ê³µìš©í—¤ë”
+	// °ø¿ëÇì´õ
 	PacketHeader header; // 4
-	// id ê³ ì •(S_TEST)
-	// size ê³ ì •(18)
+	// id °íÁ¤(S_TEST)
+	// size °íÁ¤(18)
 
 	int64 id; // 8
 	int32 hp; // 4
 	int16 atk; // 2
 	// 16 + 8 + 4 + 2 + 4 =>
 
-	uint32 buffOffset; // ë°°ì—´ì´ ì‹œì‘ì´ëŠ” ë©”ëª¨ë¦¬ offset
+	uint32 buffOffset; // ¹è¿­ÀÌ ½ÃÀÛÀÌ´Â ¸Ş¸ğ¸® offset
 	uint32 buffCount;
 
 	uint32 wCharOffset;
@@ -98,7 +105,7 @@ struct PlayerInfo_Packet
 	{
 		uint32 size = 0;
 		size += sizeof(PlayerInfo_Packet);
-		if (header.size < size) // ê·¸ëƒ¥ ì´ìƒí•¨
+		if(header.size < size) // ±×³É ÀÌ»óÇÔ
 			return false;
 
 		size += buffCount * sizeof(BuffData);
@@ -106,18 +113,18 @@ struct PlayerInfo_Packet
 		PacketList<BuffData> buffList = GetBuffList();
 		for (int i = 0; i < buffList.size(); i++)
 		{
-			if (buffList[i].Validate(reinterpret_cast<BYTE*>(this), header.size, OUT size) == false)
+			if(buffList[i].Validate(reinterpret_cast<BYTE*>(this), header.size, OUT size) == false)
 				return false;
 		}
 
 		size += wCharCount * sizeof(WCHAR);
 
-		// ë„ˆê°€ ê¸°ì…í•œ í¬ê¸°ê°€ ì‹¤ì œ íŒ¨í‚·í¬ê¸°ë‘ ë™ì¼.
-		if (size != header.size)
+		// ³Ê°¡ ±âÀÔÇÑ Å©±â°¡ ½ÇÁ¦ ÆĞÅ¶Å©±â¶û µ¿ÀÏ.
+		if(size != header.size)
 			return false;
 
-		// í˜ëŸ¬ë„˜ì¹˜ê²Œ ë“¤ì–´ì™”ë‹¤? ë­”ê°€ ì´ìƒí•¨
-		if (wCharOffset + wCharCount * sizeof(WCHAR) > header.size)
+		// Èê·¯³ÑÄ¡°Ô µé¾î¿Ô´Ù? ¹º°¡ ÀÌ»óÇÔ
+		if(wCharOffset + wCharCount * sizeof(WCHAR) > header.size)
 			return false;
 
 		return true;
@@ -129,7 +136,7 @@ struct PlayerInfo_Packet
 
 	BuffList GetBuffList()
 	{
-		// í˜„ì¬ ë©”ëª¨ë¦¬ ì£¼ì†Œì—ì„œ + buffOffset =>
+		// ÇöÀç ¸Ş¸ğ¸® ÁÖ¼Ò¿¡¼­ + buffOffset =>
 		BYTE* data = reinterpret_cast<BYTE*>(this);
 		data += buffOffset;
 
@@ -146,7 +153,7 @@ struct PlayerInfo_Packet
 
 	Name GetWcharList()
 	{
-		// í˜„ì¬ ë©”ëª¨ë¦¬ ì£¼ì†Œì—ì„œ + buffOffset =>
+		// ÇöÀç ¸Ş¸ğ¸® ÁÖ¼Ò¿¡¼­ + buffOffset =>
 		BYTE* data = reinterpret_cast<BYTE*>(this);
 		data += wCharOffset;
 
@@ -160,11 +167,32 @@ struct PlayerInfo_Packet
 class ClientPacketHandler
 {
 public:
-	// Packetí˜•íƒœë¡œ ë“¤ì–´ì™”ì„ ë•Œ => Recví–ˆì„ Â‹Âš ì²˜ë¦¬ ë°©ë²•
-	static void HandlePacket(BYTE* buffer, int32 len);
+	// PacketÇüÅÂ·Î µé¾î¿ÔÀ» ¶§ => RecvÇßÀ» ‹š Ã³¸® ¹æ¹ı
+	static void HandlePacket(shared_ptr<PacketSession> session, BYTE* buffer, int32 len);
 
-	static void Handle_C_TEST(BYTE* buffer, int32 len);
+	static void Handle_S_PlayerInfo(shared_ptr<PacketSession> session, BYTE* buffer, int32 len);
+	static void Handle_S_EnterRoom(shared_ptr<PacketSession> session, BYTE* buffer, int32 len);
+	static void Handle_S_ChatMsg(shared_ptr<PacketSession> session, BYTE* buffer, int32 len);
 
-	// Packetí˜•íƒœë¡œ SendBuffer ë§Œë“¤ê¸°
-	static shared_ptr<SendBuffer> Make_C_TEST(int64 id, int32 hp, int16 atk, vector<BuffData> buffs);
+	// PacketÇüÅÂ·Î SendBuffer ¸¸µé±â
+	static shared_ptr<SendBuffer> MakeSendBuffer(Protocol::C_PlayerInfo& pkt);
+	static shared_ptr<SendBuffer> MakeSendBuffer(Protocol::C_ChatMsg& pkt);
 };
+
+template<typename T>
+shared_ptr<SendBuffer> _MakeSendBuffer(T& pkt, uint16 pktId)
+{
+	// °ø¿ëheader ¸¸µé±â
+	const uint16 dataSize = static_cast<uint16>(pkt.ByteSizeLong()); // ByteSizeLong
+	const uint16 packetSize = dataSize + sizeof(PacketHeader);
+
+	shared_ptr<SendBuffer> sendBuffer = make_shared<SendBuffer>(packetSize);
+	PacketHeader* header = reinterpret_cast<PacketHeader*>(sendBuffer->Buffer());
+	header->id = pktId;
+	header->size = packetSize;
+
+	ASSERT_CRASH(pkt.SerializeToArray(&(header[1]), dataSize));
+
+	sendBuffer->Ready(packetSize);
+	return sendBuffer;
+}

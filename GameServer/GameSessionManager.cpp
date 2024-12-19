@@ -9,7 +9,7 @@ void GameSessionManager::Add(shared_ptr<GameSession> session)
 	WRITE_LOCK;
 
 	_sessions.insert(session);
-	// TODO: Â¿Â¹Â¿ÃœÃƒÂ³Â¸Â®
+	// TODO: ¿¹¿ÜÃ³¸®
 }
 
 void GameSessionManager::Remove(shared_ptr<GameSession> session)

@@ -16,7 +16,7 @@ public:
 	{
 		UniqueLock lg(_m);
 
-		if (_s.empty())
+		if(_s.empty())
 			return false;
 
 		output = _s.top();
@@ -39,3 +39,4 @@ private:
 	Mutex _m;
 	ConditionV _cv;
 };
+

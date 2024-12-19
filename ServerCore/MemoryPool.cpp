@@ -2,7 +2,7 @@
 #include "MemoryPool.h"
 
 MemoryPool::MemoryPool(int32 allocsize)
-	: _allocSize(allocsize)
+: _allocSize(allocsize)
 {
 }
 
@@ -16,7 +16,7 @@ void MemoryPool::Push(MemoryHeader* ptr)
 
 	ptr->_allocSize = 0;
 
-	// Poolì— ë°˜ë‚©
+	// Pool¿¡ ¹İ³³
 	_queue.push(ptr);
 
 	_allocCount.fetch_sub(1);
@@ -28,16 +28,16 @@ MemoryHeader* MemoryPool::Pop()
 
 	{
 		WRITE_LOCK;
-		// Pool ì— ì—¬ë¶„ì´ ìˆëŠ”ì§€
+		// Pool ¿¡ ¿©ºĞÀÌ ÀÖ´ÂÁö
 		if (_queue.empty() == false)
 		{
-			// ìˆìœ¼ë©´ êº¼ë‚´ì˜´
+			// ÀÖÀ¸¸é ²¨³»¿È
 			header = _queue.front();
 			_queue.pop();
 		}
 	}
 
-	// ì—¬ë¶„ì´ ì—†ë‹¤.
+	// ¿©ºĞÀÌ ¾ø´Ù.
 	if (header == nullptr)
 	{
 		header = reinterpret_cast<MemoryHeader*>(::malloc(_allocSize));

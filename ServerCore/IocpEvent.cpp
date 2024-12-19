@@ -2,14 +2,14 @@
 #include "IocpEvent.h"
 
 IocpEvent::IocpEvent(EventType type)
-	: _eventType(type)
+: _eventType(type)
 {
 	Init();
 }
 
 void IocpEvent::Init()
 {
-	OVERLAPPED::hEvent = 0;
+	OVERLAPPED::hEvent = 0; 
 	OVERLAPPED::Internal = 0;
 	OVERLAPPED::InternalHigh = 0;
 	OVERLAPPED::Offset = 0;

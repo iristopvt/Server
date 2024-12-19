@@ -1,120 +1,91 @@
 #pragma once
 
 #include "BufferWriter.h"
+#include "Protocol.pb.h"
 
-// 규약
+// 
+using PacketHandlerFunc = std::function<bool(shared_ptr<PacketSession>&, BYTE*, int32)>; 
+extern PacketHandlerFunc G_PacketHandler[UINT16_MAX]; // 32767 + 32768
+
+// �Ծ�
 enum PacketID
 {
 	NONE,
-	S_TEST = 1,
+	S_PLAYER_INFO = 1,
+	S_ENTEROOM = 2,
+	S_CHATMSG = 3,
+
+	C_PLAYER_INFO = 101,
+	C_CHATMSG = 102
 };
 
-///////////////////
-/// Packet_List ///
-///////////////////
+// �츮�� ���� �ڵ鷯�Լ�
+// Custom Handlders
+bool Handler_INVALID(shared_ptr<PacketSession>& session, BYTE* buffer, int32 len);
 
-template<typename T, typename C>
-class PacketList_Iterator
+bool Handle_C_PlayerInfo(shared_ptr<PacketSession>& session, Protocol::C_PlayerInfo& pkt);
+bool Handle_C_ChatMsg(shared_ptr<PacketSession>& session, Protocol::C_ChatMsg& pkt);
+
+class Server_PacketHandler
 {
 public:
-	PacketList_Iterator(C& container, uint16 index) : _container(container), _index(index) {}
-
-	bool			operator!=(const PacketList_Iterator& other) { return _index != other._index; }
-	const T& operator*() const { return _container[_index]; }
-	T& operator*() { return _container[_index]; }
-	T* operator->() { return &_container[_index]; }
-	PacketList_Iterator& operator++() { _index++; return *this; }
-	PacketList_Iterator operator++(int32) { PacketList_Iterator temp = *this; _index++; return temp; }
-
-private:
-	C& _container;
-	uint16	_index;
-};
-
-template<typename T>
-class PacketList
-{
-public:
-	PacketList() : _data(nullptr), _count(0) {}
-	PacketList(T* data, uint16 count) : _data(data), _count(count) {}
-
-	T& operator[](uint16 index)
+	static void Init()
 	{
-		ASSERT_CRASH(index < _count);
-		return _data[index];
+		for (int i = 0; i < UINT16_MAX; i++)
+		{
+			G_PacketHandler[i] = Handler_INVALID;
+		}
+
+		G_PacketHandler[C_PLAYER_INFO] = [](shared_ptr<PacketSession>& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_PlayerInfo>(Handle_C_PlayerInfo, session, buffer, len); };
+		G_PacketHandler[C_CHATMSG] = [](shared_ptr<PacketSession>& session, BYTE* buffer, int32 len) { return HandlePacket<Protocol::C_ChatMsg>(Handle_C_ChatMsg, session, buffer, len); };
 	}
 
-	uint16 size() { return _count; }
-	PacketList_Iterator<T, PacketList<T>> begin() { return PacketList_Iterator<T, PacketList<T>>(*this, 0); }
-	PacketList_Iterator<T, PacketList<T>> end() { return PacketList_Iterator<T, PacketList<T>>(*this, _count); }
+	static bool HandlePacket(shared_ptr<PacketSession> session, BYTE* buffer, int32 len)
+	{
+		PacketHeader* header = reinterpret_cast<PacketHeader*>(buffer);
+
+		return G_PacketHandler[header->id](session, buffer, len);
+	}
+
+	static shared_ptr<SendBuffer> MakeSendBuffer(Protocol::S_PlayerInfo& pkt) { return _MakeSendBuffer(pkt, S_PLAYER_INFO); }
+	static shared_ptr<SendBuffer> MakeSendBuffer(Protocol::S_EnterRoom& pkt) { return _MakeSendBuffer(pkt, S_ENTEROOM); }
+	static shared_ptr<SendBuffer> MakeSendBuffer(Protocol::S_ChatMsg& pkt) { return _MakeSendBuffer(pkt, S_CHATMSG); }
 
 private:
-	T* _data;
-	uint16		 _count;
-};
-
-enum BuffID
-{
-	BUFF_NONE,
-	BUFF_LOVE = 1,
-	BUFF_ANESTHESIA = 2
-};
-
-struct BuffData
-{
-	uint32 buffId;
-	float remainTime;
-
-	//vector<int32> victims;
-	uint32 victimOffset;
-	uint32 victimCount;
-};
-
-#pragma pack(1)
-struct PlayerInfo_Packet
-{
-	// 공용헤더
-	PacketHeader header; // 4
-	// id 고정(S_TEST)
-	// size 고정(18)
-
-	int64 id; // 8
-	int32 hp; // 4
-	int16 atk; // 2
-
-	uint32 buffOffset; // 배열이 시작이는 메모리 offset
-	uint32 buffCount;
-
-	uint32 wCharOffset;
-	uint32 wCharCount;
-
-	bool IsValid()
+	template<typename T>
+	static shared_ptr<SendBuffer> _MakeSendBuffer(T& pkt, uint16 pktId)
 	{
-		uint32 size = 0;
-		size += sizeof(PlayerInfo_Packet);
-		size += buffCount * sizeof(BuffData);
-		size += wCharCount * sizeof(WCHAR);
+		// ����header �����
+		const uint16 dataSize = static_cast<uint16>(pkt.ByteSizeLong()); // ByteSizeLong
+		const uint16 packetSize = dataSize + sizeof(PacketHeader);
 
-		// 너가 기입한 크기가 실제 패킷크기랑 동일.
-		if (size != header.size)
+		shared_ptr<SendBuffer> sendBuffer = make_shared<SendBuffer>(packetSize);
+		PacketHeader* header = reinterpret_cast<PacketHeader*>(sendBuffer->Buffer());
+		header->id = pktId;
+		header->size = packetSize;
+
+		ASSERT_CRASH(pkt.SerializeToArray(&(header[1]), dataSize));
+
+		sendBuffer->Ready(packetSize);
+		return sendBuffer;
+	}
+
+	// process : Deletegate�� Packet ó��
+	template<typename PacketType, typename ProcessFunc>
+	static bool HandlePacket(ProcessFunc func, shared_ptr<PacketSession>& session, BYTE* buffer, int32 len)
+	{
+		PacketType pkt;
+		if(pkt.ParseFromArray(buffer + sizeof(PacketHeader), len - sizeof(PacketHeader)) == false)
 			return false;
 
-		// 흘러넘치게 들어왔다? 뭔가 이상함
-		if (wCharOffset + wCharCount * sizeof(WCHAR) > header.size)
-			return false;
 
-		return true;
+		return func(session, pkt);
 	}
 };
-#pragma pack()
 
-class ServerPacketHandler
-{
-public:
-	static void HandlePacket(BYTE* buffer, int32 len);
 
-	static void Handle_S_TEST(BYTE* buffer, int32 len);
-};
+
+/* Packet Writer
 
 class PKT_S_TEST_WRITE
 {
@@ -125,7 +96,7 @@ public:
 		_bw = BufferWriter(_sendBuffer->Buffer(), _sendBuffer->Capacity());
 
 		_pkt = _bw.Reserve<PlayerInfo_Packet>();
-		_pkt->header.id = S_TEST;
+		_pkt->header.id = S_PLAYER_INFO;
 		_pkt->header.size = 0; // TODO
 		_pkt->id = id;
 		_pkt->hp = hp;
@@ -173,3 +144,4 @@ private:
 	shared_ptr<SendBuffer> _sendBuffer;
 	BufferWriter _bw;
 };
+*/

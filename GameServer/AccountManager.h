@@ -10,18 +10,18 @@ class AccountManager
 	USE_LOCK;
 
 private:
-	AccountManager() {}
+	AccountManager(){}
 	~AccountManager() {}
 
 public:
 	static void Create()
 	{
-		if (_instance == nullptr) _instance = new AccountManager();
+		if(_instance == nullptr) _instance = new AccountManager();
 	}
 
 	static void Delete()
 	{
-		if (_instance != nullptr) delete _instance;
+		if(_instance != nullptr) delete _instance;
 	}
 
 	static AccountManager* GetInstance()
@@ -41,3 +41,4 @@ public:
 private:
 	static AccountManager* _instance;
 };
+

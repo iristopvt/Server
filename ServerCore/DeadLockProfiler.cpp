@@ -27,7 +27,7 @@ void DeadLockProfiler::PushLock(const char* name)
 		const int32 prevId = LLockStack.top();
 		if (lockId != prevId) // lock 스택에서 내 전꺼와 다르다면 사이클 판별을 해야한다.
 		{
-			set<int32>& history = _lockHistory[prevId];
+			set<int32>& history = _lockHistory[prevId]; 
 			if (history.find(lockId) == history.end())
 			{
 				history.insert(lockId);
@@ -43,11 +43,11 @@ void DeadLockProfiler::PopLock(const char* name)
 {
 	LockGuard guard(_lock);
 
-	if (LLockStack.empty())
+	if(LLockStack.empty())
 		CRASH("MULTIPLE POP");
 
 	int32 lockId = _nameToId[name];
-	if (LLockStack.top() != lockId)
+	if(LLockStack.top() != lockId)
 		CRASH("UNVAILD POP");
 
 	LLockStack.pop();
@@ -74,7 +74,7 @@ void DeadLockProfiler::CheckCycle()
 
 void DeadLockProfiler::DFS(int32 here)
 {
-	if (_discoveredOrder[here] != -1)
+	if(_discoveredOrder[here] != -1)
 		return;
 
 	_discoveredOrder[here] = _discoveredCount++;
@@ -99,10 +99,10 @@ void DeadLockProfiler::DFS(int32 here)
 			DFS(there);
 			continue;
 		}
-
+		
 		// 순방향 간선
 		// here가 there보다 먼저 발견되었다면, there는 here의 후손이다.
-		if (_discoveredOrder[here] < _discoveredOrder[there])
+		if(_discoveredOrder[here] < _discoveredOrder[there])
 			continue;
 
 		// 순방향이 아니고, DFS(there)가 아직 종료하지 않았다면, there는 here의 선조이다. => (역방향 간선)
@@ -116,7 +116,7 @@ void DeadLockProfiler::DFS(int32 here)
 			{
 				cout << _idToName[_parent[now]] << " -> " << _idToName[now] << endl;
 				now = _parent[now];
-				if (now == there)
+				if(now == there)
 					break;
 			}
 

@@ -1,11 +1,11 @@
 #pragma once
 #include "NetAddress.h"
 
-// ì •ì  ë©¤ë²„í•¨ìˆ˜ ëª¨ìŒì§‘
+// Á¤Àû ¸â¹öÇÔ¼ö ¸ğÀ½Áı
 class SocketUtility
 {
 public:
-	// TODO : ë¹„ë™ê¸° AccpetEx, ë“±ë“±..
+	// TODO : ºñµ¿±â AccpetEx, µîµî..
 	static LPFN_CONNECTEX	ConnectEx;
 	static LPFN_DISCONNECTEX DisConnectEx;
 	static LPFN_ACCEPTEX AcceptEx;

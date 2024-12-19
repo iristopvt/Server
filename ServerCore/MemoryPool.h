@@ -17,7 +17,7 @@ struct MemoryHeader
 	}
 
 	int32 _allocSize;
-	// TODO : headerÂ¿Â¡ Ã‡ÃŠÂ¿Ã¤Ã‡Ã‘ ÃƒÃŸÂ°Â¡ÃÂ¤ÂºÂ¸
+	// TODO : header¿¡ ÇÊ¿äÇÑ Ãß°¡Á¤º¸
 };
 
 class MemoryPool
@@ -36,3 +36,4 @@ private:
 	USE_LOCK;
 	queue<MemoryHeader*> _queue;
 };
+

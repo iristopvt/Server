@@ -1,1 +1,10 @@
-﻿LINK : fatal error LNK1104: 'Libs\ServerCore\Debug\ServerCore.lib' 파일을 열 수 없습니다.
+﻿  pch.cpp
+  Client.cpp
+  ClientPacketHandler.cpp
+  Player.cpp
+  ServerSession.cpp
+  코드를 생성하고 있습니다...
+  Protocol.pb.cc
+Client.obj : error LNK2001: 확인할 수 없는 외부 기호 "private: virtual int __cdecl PacketSession::OnRecv(unsigned char *,int)" (?OnRecv@PacketSession@@EEAAHPEAEH@Z)
+Client.obj : error LNK2019: "public: void __cdecl Service::Broadcast(class std::shared_ptr<class SendBuffer>)" (?Broadcast@Service@@QEAAXV?$shared_ptr@VSendBuffer@@@std@@@Z)main 함수에서 참조되는 확인할 수 없는 외부 기호
+C:\Users\zxcvb\Downloads\11\Binary\Debug\Client.exe : fatal error LNK1120: 2개의 확인할 수 없는 외부 참조입니다.

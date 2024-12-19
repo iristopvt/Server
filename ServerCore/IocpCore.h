@@ -1,7 +1,7 @@
 #pragma once
 
-// IocpObjectë¥¼ ìƒì†ë°›ì•„ì„œ Socket
-class IocpObject : public enable_shared_from_this<IocpObject>
+// IocpObject¸¦ »ó¼Ó¹Ş¾Æ¼­ Socket
+class IocpObject : public enable_shared_from_this<IocpObject> 
 {
 public:
 	virtual HANDLE GetHandle() abstract;
@@ -16,12 +16,13 @@ public:
 
 	HANDLE GetHandle() { return _iocpHandle; }
 
-	// Completion Portì— Socket ë“±ë¡
+	// Completion Port¿¡ Socket µî·Ï
 	bool Register(shared_ptr<IocpObject> iocpObj);
 
-	// ì‹¤í–‰ ì¤€ë¹„ í›„ ì‹¤í–‰
+	// ½ÇÇà ÁØºñ ÈÄ ½ÇÇà
 	bool Dispatch(uint32 timeOutMs = INFINITE);
 
 private:
 	HANDLE _iocpHandle;
 };
+

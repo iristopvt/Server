@@ -1,28 +1,16 @@
 ﻿  pch.cpp
   AccountManager.cpp
   GameServer.cpp
+C:\Users\zxcvb\Downloads\11\GameServer\GameServer.cpp(12,10): warning C4067: 전처리기 지시문 다음에 예기치 않은 토큰이 있습니다. 줄 바꿈 문자가 필요합니다.
+  (소스 파일 '/GameServer.cpp'을(를) 컴파일하는 중)
+  
   GameSession.cpp
-C:\Users\zxcvb\Downloads\Server\GameServer\ServerPacketHandler.h(142,44): warning C4244: '=': 'uint64'에서 'uint32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/GameSession.cpp'을(를) 컴파일하는 중)
-  
-C:\Users\zxcvb\Downloads\Server\GameServer\ServerPacketHandler.h(150,44): warning C4244: '=': 'uint64'에서 'uint32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/GameSession.cpp'을(를) 컴파일하는 중)
-  
-C:\Users\zxcvb\Downloads\Server\GameServer\ServerPacketHandler.h(158,40): warning C4244: '=': 'uint64'에서 'uint32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/GameSession.cpp'을(를) 컴파일하는 중)
-  
   GameSessionManager.cpp
-  Protocol.pb.cc
-C:\Users\zxcvb\Downloads\Server\GameServer\Protocol.pb.cc(645,1): error C1010: 미리 컴파일된 헤더를 찾는 동안 예기치 않은 파일의 끝이 나타났습니다. '#include "pch.h"'을(를) 소스에 추가하시겠습니까?
+  Player.cpp
+  Room.cpp
   ServerPacketHandler.cpp
-C:\Users\zxcvb\Downloads\Server\GameServer\ServerPacketHandler.h(142,44): warning C4244: '=': 'uint64'에서 'uint32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/ServerPacketHandler.cpp'을(를) 컴파일하는 중)
-  
-C:\Users\zxcvb\Downloads\Server\GameServer\ServerPacketHandler.h(150,44): warning C4244: '=': 'uint64'에서 'uint32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/ServerPacketHandler.cpp'을(를) 컴파일하는 중)
-  
-C:\Users\zxcvb\Downloads\Server\GameServer\ServerPacketHandler.h(158,40): warning C4244: '=': 'uint64'에서 'uint32'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/ServerPacketHandler.cpp'을(를) 컴파일하는 중)
-  
   UserManager.cpp
   코드를 생성하고 있습니다...
+  Protocol.pb.cc
+GameSession.obj : error LNK2001: 확인할 수 없는 외부 기호 "private: virtual int __cdecl PacketSession::OnRecv(unsigned char *,int)" (?OnRecv@PacketSession@@EEAAHPEAEH@Z)
+C:\Users\zxcvb\Downloads\11\Binary\Debug\GameServer.exe : fatal error LNK1120: 1개의 확인할 수 없는 외부 참조입니다.

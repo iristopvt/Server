@@ -12,7 +12,7 @@ class Session : public IocpObject
 
 	enum
 	{
-		BUFF_SIZE = 0x10000, // 64KB => 6ë§Œ5ì²œë°”ì´íŠ¸
+		BUFF_SIZE = 0x10000, // 64KB => 6¸¸5Ãµ¹ÙÀÌÆ®
 	};
 
 public:
@@ -21,7 +21,7 @@ public:
 
 public:
 
-	// ì •ë³´ ê´€ë ¨
+	// Á¤º¸ °ü·Ã
 	shared_ptr<Service> GetService() { return _service.lock(); }
 	void SetService(shared_ptr<Service> service);
 
@@ -33,21 +33,21 @@ public:
 	bool IsConnected() { return _connected; }
 	shared_ptr<Session> GetSessionShared() { return static_pointer_cast<Session>(shared_from_this()); }
 
-	// ì „ì†¡ ê´€ë ¨
-	// - ì™¸ë¶€(Client, Server)ì—ì„œ ì“¸ í•¨ìˆ˜
+	// Àü¼Û °ü·Ã
+	// - ¿ÜºÎ(Client, Server)¿¡¼­ ¾µ ÇÔ¼ö
 	bool Connect();
 	void Send(shared_ptr<SendBuffer> buffer);
 	void DisConnect(const WCHAR* cause);
 
-	// ë‚´ë¶€ì—ì„œë§Œ ì“¸ í•¨ìˆ˜ë“¤
+	// ³»ºÎ¿¡¼­¸¸ ¾µ ÇÔ¼öµé
 private:
-	// CP(Completion Port)ì— ë“±ë¡
-	bool RegisterConnect(); // ì†ë‹˜ì´ ì‹íƒì— ì•‰ê¸°.
+	// CP(Completion Port)¿¡ µî·Ï
+	bool RegisterConnect(); // ¼Õ´ÔÀÌ ½ÄÅ¹¿¡ ¾É±â.
 	bool RegisterDisConnect();
-	void RegisterRecv(); // ì†ë‹˜ì´ ì£¼ëŠ” ë©”ì‹œì§€-> ì»¤ë„ì˜ RecvBuffer -> ìœ ì €ì˜ì—­ì— Session::recvBufferì— ë³µì‚¬
-	void RegisterSend(); // ë‚´ê°€ ì†ë‹˜í•œí…Œ ì¤„ ë©”ì‹œì§€
+	void RegisterRecv(); // ¼Õ´ÔÀÌ ÁÖ´Â ¸Ş½ÃÁö-> Ä¿³ÎÀÇ RecvBuffer -> À¯Àú¿µ¿ª¿¡ Session::recvBuffer¿¡ º¹»ç
+	void RegisterSend(); // ³»°¡ ¼Õ´ÔÇÑÅ× ÁÙ ¸Ş½ÃÁö
 
-	// CPì— ë“±ë¡ë˜ì–´ìˆë˜ Eventë“¤ DisPatch(ë³´ë‚¸ë‹¤)
+	// CP¿¡ µî·ÏµÇ¾îÀÖ´ø Eventµé DisPatch(º¸³½´Ù)
 	void ProcessConnect();
 	void ProcessDisConnect();
 	void ProcessRecv(int32 numOfBytes);
@@ -56,7 +56,7 @@ private:
 	void HandleError(int32 errorCode);
 
 protected:
-	// ServerSession , ClientSessionì—ì„œ í•„ìš”í•  ê²½ìš° ì˜¤ë²„ë¼ì´ë”©
+	// ServerSession , ClientSession¿¡¼­ ÇÊ¿äÇÒ °æ¿ì ¿À¹ö¶óÀÌµù
 	virtual void OnConnected() {}
 	virtual void OnDisConnected() {}
 	virtual int32 OnRecv(BYTE* buffer, int32 len) { return len; }
@@ -72,10 +72,10 @@ private:
 
 private:
 	USE_LOCK;
-	// ìˆ˜ì‹  ê´€ë ¨
+	// ¼ö½Å °ü·Ã
 	RecvBuffer _recvBuffer;
 
-	// ì†¡ì‹  ê´€ë ¨
+	// ¼Û½Å °ü·Ã
 	Queue<shared_ptr<SendBuffer>> _sendQueue;
 	Atomic<bool> _sendRegistered = false;
 
@@ -87,16 +87,16 @@ private:
 
 
 // PacketSession
-// Packetì´ ì™œ í•„ìš”í•œê°€...
-// SendBufferë¡œ ë°ì´í„°ë¥¼ ì „ë‹¬í•  ë•Œ TCP í™˜ê²½ì—ì„œëŠ” ë°ì´í„° í•œ ë¬¶ìŒì´ ë‹¤ ì „ë‹¬ëœë‹¤ëŠ” ë³´ì¥ì´ ì—†ë‹¤.
+// PacketÀÌ ¿Ö ÇÊ¿äÇÑ°¡...
+// SendBuffer·Î µ¥ÀÌÅÍ¸¦ Àü´ŞÇÒ ¶§ TCP È¯°æ¿¡¼­´Â µ¥ÀÌÅÍ ÇÑ ¹­À½ÀÌ ´Ù Àü´ŞµÈ´Ù´Â º¸ÀåÀÌ ¾ø´Ù.
 
-// Packetìœ¼ë¡œ í™•ì¸í•´ì•¼í•  ê²ƒ.
-// 1. ì–´ë–¤ ìš©ë„ì˜ ë°ì´í„°ì¸ì§€
-// 2. ì´ ë°ì´í„°ì˜ ì´ í¬ê¸°ëŠ” ì–´ë–»ê²Œ ë˜ëŠ”ì§€
+// PacketÀ¸·Î È®ÀÎÇØ¾ßÇÒ °Í.
+// 1. ¾î¶² ¿ëµµÀÇ µ¥ÀÌÅÍÀÎÁö
+// 2. ÀÌ µ¥ÀÌÅÍÀÇ ÃÑ Å©±â´Â ¾î¶»°Ô µÇ´ÂÁö
 struct PacketHeader
 {
 	uint16 size;
-	uint16 id; // í”„ë¡œí† ì½œ ID : (ex 1 : ë¡œê·¸ì¸, 2 : ì´ë™)
+	uint16 id; // ÇÁ·ÎÅäÄİ ID : (ex 1 : ·Î±×ÀÎ, 2 : ÀÌµ¿)
 };
 
 class PacketSession : public Session

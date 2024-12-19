@@ -22,3 +22,4 @@ private:
 	vector<bool>	_finished; // 현재(here) DFS가 끝났는지 여부
 	vector<int32>	_parent;
 };
+

@@ -6,7 +6,7 @@ public:
 	~SendBuffer();
 
 	BYTE* Buffer() { return _buffer.data(); }
-	int32 WriteSize() { return _writeSize; }
+	int32 WriteSize() {return _writeSize; }
 	int32 Capacity() { return static_cast<int32>(_buffer.size()); }
 
 	void CopyData(void* data, int32 len);
@@ -17,3 +17,4 @@ private:
 	Vector<BYTE> _buffer; // [H][e][l][l][l][][][][][]
 	int32 _writeSize = 0;
 };
+

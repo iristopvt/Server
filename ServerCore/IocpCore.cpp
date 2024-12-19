@@ -5,7 +5,7 @@
 
 IocpCore::IocpCore()
 {
-	// Completion Port ìƒì„±
+	// Completion Port »ı¼º
 	_iocpHandle = ::CreateIoCompletionPort(INVALID_HANDLE_VALUE, 0, 0, 0);
 	ASSERT_CRASH(_iocpHandle != INVALID_HANDLE_VALUE);
 }
@@ -15,37 +15,37 @@ IocpCore::~IocpCore()
 	::CloseHandle(_iocpHandle);
 }
 
-// Completion Port ì“°ë˜ ì´ìœ :
-// - ë©€í‹°ì“°ë ˆë“œì— ì í•©í•˜ë‹ˆê¹Œ
-//  => ì“°ë ˆë“œë§ˆë‹¤ ê°–ê³ ìˆë˜ APCíë¡œ ì¼ì„ ì²˜ë¦¬í•˜ëŠ”ê²Œ ì•„ë‹ˆë¼, Completion Portì— ë‹´ì•„ì„œ ì²˜ë¦¬í•˜ê¸° ë•Œë¬¸.
+// Completion Port ¾²´ø ÀÌÀ¯:
+// - ¸ÖÆ¼¾²·¹µå¿¡ ÀûÇÕÇÏ´Ï±î
+//  => ¾²·¹µå¸¶´Ù °®°íÀÖ´ø APCÅ¥·Î ÀÏÀ» Ã³¸®ÇÏ´Â°Ô ¾Æ´Ï¶ó, Completion Port¿¡ ´ã¾Æ¼­ Ã³¸®ÇÏ±â ¶§¹®.
 bool IocpCore::Register(shared_ptr<IocpObject> iocpObj)
 {
-	// * í˜„ì¬ìƒí™© : iocpObjê°€ Sessionì„.
+	// * ÇöÀç»óÈ² : iocpObj°¡ SessionÀÓ.
 	//                    or Listener
 
-	// sessionì„ Eventì—ì„œ ë¬¼ê³ ìˆë„ë¡...
-	// => iocpEventì—ì„œ í˜„ì¬ ë‚´ ì„¸ì…˜ì„ ë©¤ë²„ë³€ìˆ˜ë¡œ ê°–ê³ ìˆê² ë‹¤.
-	// ==> ì„¸ì…˜ refCount + 1
+	// sessionÀ» Event¿¡¼­ ¹°°íÀÖµµ·Ï...
+	// => iocpEvent¿¡¼­ ÇöÀç ³» ¼¼¼ÇÀ» ¸â¹öº¯¼ö·Î °®°íÀÖ°Ú´Ù.
+	// ==> ¼¼¼Ç refCount + 1
 	//    	 														  key
 	return ::CreateIoCompletionPort(iocpObj->GetHandle(), _iocpHandle, 0, 0);
 }
 
 bool IocpCore::Dispatch(uint32 timeOutMs)
 {
-	// CompletionPortì— ìˆëŠ” í•¨ìˆ˜ë“¤ ì‹¤í–‰
+	// CompletionPort¿¡ ÀÖ´Â ÇÔ¼öµé ½ÇÇà
 
 	DWORD numOfBytes = 0;
 	ULONG_PTR key = 0;
 	shared_ptr<IocpObject> iocpObject = nullptr;
 	IocpEvent* iocpEvent = nullptr;
 
-	if (::GetQueuedCompletionStatus(
-		_iocpHandle,
-		&numOfBytes,
-		&key, // key... 0
-		reinterpret_cast<LPOVERLAPPED*>(&iocpEvent),
-		timeOutMs
-	))
+	if(::GetQueuedCompletionStatus(
+			_iocpHandle,
+			&numOfBytes,
+			&key, // key... 0
+			reinterpret_cast<LPOVERLAPPED*>(&iocpEvent),
+			timeOutMs
+		))
 	{
 		iocpObject = iocpEvent->GetOwner();
 		iocpObject->DisPatch(iocpEvent, numOfBytes);
@@ -59,6 +59,7 @@ bool IocpCore::Dispatch(uint32 timeOutMs)
 			return false;
 
 		default:
+			// TODO : ¿Ö ¾È‰ç´ÂÁö ÄÚµåºĞ¼®
 			iocpObject = iocpEvent->GetOwner();
 			iocpObject->DisPatch(iocpEvent, numOfBytes);
 			break;

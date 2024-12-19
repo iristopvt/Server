@@ -10,10 +10,10 @@ public:
 	bool OnRead(int32 numOfBytes);
 	bool OnWrite(int32 numOfBytes);
 
-	// Read CursorÀÇ À§Ä¡ ¹ÝÈ¯
-	BYTE* ReadPos() { return &_buffer[_readPos]; }
-	// Write CursorÀÇ À§Ä¡ ¹ÝÈ¯
-	BYTE* WritePos() { return &_buffer[_writePos]; }
+	// Read Cursor�� ��ġ ��ȯ
+	BYTE*	ReadPos() { return &_buffer[_readPos]; }
+	// Write Cursor�� ��ġ ��ȯ
+	BYTE*	WritePos() { return &_buffer[_writePos]; }
 	int32	DataSize() { return _writePos - _readPos; }
 	int32	FreeSize() { return _capacity - _writePos; }
 
@@ -25,3 +25,4 @@ private:
 
 	Vector<BYTE> _buffer;
 };
+

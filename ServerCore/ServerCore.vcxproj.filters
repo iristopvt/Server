@@ -1,23 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Main">
-      <UniqueIdentifier>{c3dfc5a4-4174-4e6b-af7e-3d4876efa744}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Memory">
-      <UniqueIdentifier>{8e0f9d59-3759-4099-bea3-b881cf60e527}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="NeWork">
-      <UniqueIdentifier>{49c01813-b8e1-44bf-a9e1-090b54bdb35d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utility">
       <UniqueIdentifier>{abefbf7d-f13d-4980-be00-fdfa8ef2a40a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{e535541f-5af6-43f7-a6f5-9f4836a2a1e3}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Thread">
-      <UniqueIdentifier>{aaa3e9a6-1cca-42c0-b1a1-d68204a37e0b}</UniqueIdentifier>
+      <UniqueIdentifier>{f92f7b0f-73bf-48e3-9f24-ea2a618c51cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Memory">
+      <UniqueIdentifier>{312ff8f6-56fb-4a7c-9bce-c51ec2cdbdc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{21048e0e-14fd-46f3-9137-476c01de77ba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="LockBasedStack.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
     <ClInclude Include="CorePch.h">
       <Filter>Main</Filter>
     </ClInclude>
@@ -25,9 +28,6 @@
       <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="Types.h">
-      <Filter>Main</Filter>
-    </ClInclude>
-    <ClInclude Include="LockBasedStack.h">
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="LockBasedQueue.h">
@@ -67,48 +67,45 @@
       <Filter>Memory</Filter>
     </ClInclude>
     <ClInclude Include="SocketUtility.h">
-      <Filter>NeWork</Filter>
+      <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="NetAddress.h">
-      <Filter>NeWork</Filter>
+      <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="IocpCore.h">
-      <Filter>NeWork</Filter>
-    </ClInclude>
-    <ClInclude Include="Listener.h">
-      <Filter>NeWork</Filter>
-    </ClInclude>
-    <ClInclude Include="Session.h">
-      <Filter>NeWork</Filter>
+      <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="IocpEvent.h">
-      <Filter>NeWork</Filter>
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Session.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Listener.h">
+      <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="Service.h">
-      <Filter>NeWork</Filter>
+      <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="RecvBuffer.h">
-      <Filter>NeWork</Filter>
+      <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="SendBuffer.h">
-      <Filter>NeWork</Filter>
-    </ClInclude>
-    <ClInclude Include="BufferWriter.h">
-      <Filter>NeWork</Filter>
+      <Filter>Network</Filter>
     </ClInclude>
     <ClInclude Include="BufferReader.h">
-      <Filter>NeWork</Filter>
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferWriter.h">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="pch.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="ServerCore.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
     <ClCompile Include="LockBasedStack.cpp">
       <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="LockBasedQueue.cpp">
       <Filter>Utility</Filter>
@@ -141,37 +138,37 @@
       <Filter>Memory</Filter>
     </ClCompile>
     <ClCompile Include="SocketUtility.cpp">
-      <Filter>NeWork</Filter>
+      <Filter>Network</Filter>
     </ClCompile>
     <ClCompile Include="NetAddress.cpp">
-      <Filter>NeWork</Filter>
+      <Filter>Network</Filter>
     </ClCompile>
     <ClCompile Include="IocpCore.cpp">
-      <Filter>NeWork</Filter>
-    </ClCompile>
-    <ClCompile Include="Listener.cpp">
-      <Filter>NeWork</Filter>
-    </ClCompile>
-    <ClCompile Include="Session.cpp">
-      <Filter>NeWork</Filter>
+      <Filter>Network</Filter>
     </ClCompile>
     <ClCompile Include="IocpEvent.cpp">
-      <Filter>NeWork</Filter>
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Session.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="Listener.cpp">
+      <Filter>Network</Filter>
     </ClCompile>
     <ClCompile Include="Service.cpp">
-      <Filter>NeWork</Filter>
+      <Filter>Network</Filter>
     </ClCompile>
     <ClCompile Include="RecvBuffer.cpp">
-      <Filter>NeWork</Filter>
+      <Filter>Network</Filter>
     </ClCompile>
     <ClCompile Include="SendBuffer.cpp">
-      <Filter>NeWork</Filter>
-    </ClCompile>
-    <ClCompile Include="BufferWriter.cpp">
-      <Filter>NeWork</Filter>
+      <Filter>Network</Filter>
     </ClCompile>
     <ClCompile Include="BufferReader.cpp">
-      <Filter>NeWork</Filter>
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="BufferWriter.cpp">
+      <Filter>Utility</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

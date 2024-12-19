@@ -14,7 +14,7 @@ private:
 public:
 	static void Create()
 	{
-		if (_instance == nullptr)
+		if(_instance == nullptr)
 			_instance = new CoreGlobal();
 	}
 
@@ -29,7 +29,7 @@ public:
 
 	static CoreGlobal* Instance()
 	{
-		if (_instance != nullptr)
+		if(_instance != nullptr)
 			return _instance;
 		return nullptr;
 	}
@@ -41,7 +41,8 @@ public:
 private:
 	static CoreGlobal* _instance;
 
-	ThreadManager* _threadManager;
-	DeadLockProfiler* _deadLockProfiler;
-	Memory* _memory;
+	ThreadManager*			_threadManager;
+	DeadLockProfiler*		_deadLockProfiler;
+	Memory*					_memory;
 };
+

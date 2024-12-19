@@ -2,22 +2,30 @@
 #include "ClientPacketHandler.h"
 #include "BufferReader.h"
 #include "BufferWriter.h"
+#include "Protocol.pb.h"
+#include "ServerSession.h"
 
-void ClientPacketHandler::HandlePacket(BYTE* buffer, int32 len)
+void ClientPacketHandler::HandlePacket(shared_ptr<PacketSession> session, BYTE* buffer, int32 len)
 {
-	// TODO : Recví–ˆì„ ë•Œ íŒ¨í‚· íŒŒì‹±í•˜ê³  ë¶„ì„
 	BufferReader br(buffer, len);
-	int32 t = sizeof(PlayerInfo_Packet);
 	PacketHeader header;
 	br.Peek(&header);
 
 	switch (header.id)
 	{
-	case 0: // idê°€ ì´ì˜€ë‹¤..?
+	case 0: // id°¡ ÀÌ¿´´Ù..?
 		break;
 
-	case S_TEST:
-		Handle_C_TEST(buffer, len);
+	case S_PLAYER_INFO:
+		Handle_S_PlayerInfo(session, buffer, len);
+		break;
+
+	case S_ENTEROOM:
+		Handle_S_EnterRoom(session, buffer, len);
+		break;
+
+	case S_CHATMSG:
+		Handle_S_ChatMsg(session, buffer, len);
 		break;
 
 	default:
@@ -25,55 +33,78 @@ void ClientPacketHandler::HandlePacket(BYTE* buffer, int32 len)
 	}
 }
 
-// header[4] [ ID(1), hp(100), atk(5), 2 ,ì‚¬ë‘ë‹ˆ, 1.0, ë§ˆì·¨, 2.0]
-// 
-// 
-// Player Id : 1, hp : 100, atk : 5, buff[ì‚¬ë‘ë‹ˆ, 1.0], buff[ë§ˆì·¨, 2.0]
-void ClientPacketHandler::Handle_C_TEST(BYTE* buffer, int32 len)
+void ClientPacketHandler::Handle_S_PlayerInfo(shared_ptr<PacketSession> session, BYTE* buffer, int32 len)
 {
-	BufferReader br(buffer, len);
+	Protocol::S_PlayerInfo pkt;
 
-	PlayerInfo_Packet* pkt = reinterpret_cast<PlayerInfo_Packet*>(buffer);
+	pkt.ParseFromArray(buffer + sizeof(PacketHeader), len - sizeof(PacketHeader));
 
-	if (pkt->IsValid() == false)
-		return;
+	cout << "ID: " << pkt.id() << "  HP : " << pkt.hp() << "  ATK : " << pkt.atk() << endl;
+	cout << "BUFFS SIZE : " << pkt.buffs_size() << endl;
 
-	PlayerInfo_Packet::BuffList buffDataes = pkt->GetBuffList();
-
-	cout << "BuffCount : " << buffDataes.size() << endl;
-
-	for (auto& buff : buffDataes)
+	for (auto& buff : pkt.buffs())
 	{
-		cout << "BuffId : " << buff.buffId << "  /   BuffRemain : " << buff.remainTime << endl;
+		cout << "BUFF ID : " << buff.buffid() << endl;
+		cout << "REMAIN TIME : " << buff.remaintime() << endl;
+		cout << "VICTIMS SIZE : " << buff.victims_size() << endl;
 
-		PlayerInfo_Packet::VictimList victims = pkt->GetVictimList(&buff);
-		cout << "victim count : " << buff.victimCount << endl;
-		for (auto& victim : victims)
+		for (auto& victim : buff.victims())
 		{
-			cout << "Victim : " << victim << endl;
+			cout << "VICTIM ID : " << victim << endl;
 		}
+
+		cout << endl;
 	}
 
-	PlayerInfo_Packet::Name wCharList = pkt->GetWcharList();
-	wcout << (WCHAR*)&wCharList[0] << endl;
+	// ´Ù½Ã ¼­¹öÇÑÅ× C_PLAYER_INFO
+	// id, hp, atk
 }
 
-shared_ptr<SendBuffer> ClientPacketHandler::Make_C_TEST(int64 id, int32 hp, int16 atk, vector<BuffData> buffs)
+void ClientPacketHandler::Handle_S_EnterRoom(shared_ptr<PacketSession> session, BYTE* buffer, int32 len)
 {
-	shared_ptr<SendBuffer> buf = make_shared<SendBuffer>(1000);
-	//PlayerInfo_Protocol p;
-	//p.id = id;
-	//p.hp = hp;
-	//p.atk = atk;
+	// TODO : ¾À ÀÌµ¿
+	// ½ÇÆĞÇßÀ¸¸é ASSERT ½ÃÄÑ¼­ Á¾·á
+	Protocol::S_EnterRoom pkt;
 
-	//BufferWriter bw(buf->Buffer(), buf->Capacity());
+	pkt.ParseFromArray(buffer + sizeof(PacketHeader), len - sizeof(PacketHeader));
 
-	//PacketHeader* header = bw.Reserve<PacketHeader>();
-	//header->id = S_TEST;
-	//header->size = (sizeof(p) + sizeof(PacketHeader));
-	//bw << p;
+	bool success = pkt.success();
 
-	//buf->Ready(bw.WriteSize());
+	if (success == false)
+	{
+		CRASH("CAN NOT ENTER");
+	}
 
-	return buf;
+	string sendMsg;
+
+	Protocol::C_ChatMsg sendPkt;
+	sendPkt.set_id(G_Player.id);
+	sendPkt.set_msg(u8"Hello !!!");
+
+	auto sendBuffer = ClientPacketHandler::MakeSendBuffer(sendPkt);
+	session->Send(sendBuffer);
+
+	return;
+}
+
+void ClientPacketHandler::Handle_S_ChatMsg(shared_ptr<PacketSession> session, BYTE* buffer, int32 len)
+{
+	Protocol::S_ChatMsg pkt;
+
+	pkt.ParseFromArray(buffer + sizeof(PacketHeader), len - sizeof(PacketHeader));
+
+	string name = pkt.name();
+	string msg = pkt.msg();
+
+	cout << name << ": " << msg << endl;
+}
+
+shared_ptr<SendBuffer> ClientPacketHandler::MakeSendBuffer(Protocol::C_PlayerInfo& pkt)
+{
+	return _MakeSendBuffer(pkt, PacketID::C_PLAYER_INFO);
+}
+
+shared_ptr<SendBuffer> ClientPacketHandler::MakeSendBuffer(Protocol::C_ChatMsg& pkt)
+{
+	return _MakeSendBuffer(pkt, PacketID::C_CHATMSG);
 }

@@ -22,7 +22,7 @@ bool Listener::StartAccept(shared_ptr<ServerService> service)
 	_socket = SocketUtility::CreateSocket();
 	if (_socket == INVALID_SOCKET) return false;
 
-	// ListenerÂ¸Â¦ Completion PortÂ¿Â¡ ÂµÃ®Â·Ã
+	// Listener¸¦ Completion Port¿¡ µî·Ï
 	shared_ptr<IocpObject> temp = shared_from_this();
 	if (service->GetIocpCore()->Register(shared_from_this()) == false)
 		return false;
@@ -84,8 +84,8 @@ void Listener::RegisterAccept(AcceptEvent* acceptEvent)
 		const int32 errorCode = ::WSAGetLastError();
 		if (errorCode != WSA_IO_PENDING)
 		{
-			// TODO : Ã€ÃŒÂ»Ã³Ã‡Ã”
-
+			// TODO : ÀÌ»óÇÔ
+			
 			RegisterAccept(acceptEvent); // 
 		}
 	}
@@ -95,14 +95,14 @@ void Listener::ProcessAccept(AcceptEvent* acceptEvent)
 {
 	shared_ptr<Session> session = acceptEvent->GetSession();
 
-	if (false == SocketUtility::SetUpdateAcceptSocket(session->GetSocket(), _socket))
+	if(false == SocketUtility::SetUpdateAcceptSocket(session->GetSocket(), _socket))
 	{
 		RegisterAccept(acceptEvent);
 		return;
 	}
 
 	// session
-	// - Â½Ã„Ã…Â¹
+	// - ½ÄÅ¹
 
 	SOCKADDR_IN sockAddress;
 	int32 sizeofSockAddr = sizeof(sockAddress);

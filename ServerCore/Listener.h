@@ -5,9 +5,9 @@
 #include "IocpEvent.h"
 
 class AcceptEvent;
-// ì—­í•  :
-// í´ë¼ì´ì–¸íŠ¸ê°€ ì—°ê²° ì‹œë„(ì‹ë‹¹ì— ë“¤ì–´ì˜´) í•  ë•Œ
-// Acceptí•œë‹¤. (ëª‡ëª…ì´ì„œ ì˜¤ì…¨ì–´ìš”?)
+// ¿ªÇÒ :
+// Å¬¶óÀÌ¾ğÆ®°¡ ¿¬°á ½Ãµµ(½Ä´ç¿¡ µé¾î¿È) ÇÒ ¶§
+// AcceptÇÑ´Ù. (¸î¸íÀÌ¼­ ¿À¼Ì¾î¿ä?)
 class Listener : public IocpObject
 {
 public:
@@ -30,3 +30,4 @@ protected:
 	Vector<AcceptEvent*> _acceptEvents;
 	shared_ptr<class ServerService> _service;
 };
+

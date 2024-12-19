@@ -6,8 +6,8 @@ class MemoryPool;
 class Memory
 {
 	enum			//  32                             8                     8
-	{				 // 0 ~ 1024 ... 32ë‹¨ìœ„ / 1024 ~ 2048 ... 128ë‹¨ìœ„ / 2048 ~ 4096 ... 256 ë‹¨ìœ„
-		POOL_COUNT = (1024 / 32) + (1024 / 128) + (2048 / 256),
+	{				 // 0 ~ 1024 ... 32´ÜÀ§ / 1024 ~ 2048 ... 128´ÜÀ§ / 2048 ~ 4096 ... 256 ´ÜÀ§
+		POOL_COUNT = (1024 /32) + (1024 / 128) + (2048 / 256),
 		MAX_ALLOC_SIZE = 4096
 	};
 
@@ -19,9 +19,9 @@ public:
 	void  Release(void* ptr);
 
 private:
-	vector<MemoryPool*> _pools; // 48ê°œì˜ ë©”ëª¨ë¦¬ í’€
+	vector<MemoryPool*> _pools; // 48°³ÀÇ ¸Ş¸ğ¸® Ç®
 
-	// ë©”ëª¨ë¦¬ í’€ì„ ë¹ ë¥´ê²Œ íƒìƒ‰í•˜ê¸° ìœ„í•œ Table
+	// ¸Ş¸ğ¸® Ç®À» ºü¸£°Ô Å½»öÇÏ±â À§ÇÑ Table
 	MemoryPool* _poolTable[MAX_ALLOC_SIZE + 1];
 };
 

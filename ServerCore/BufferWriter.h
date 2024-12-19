@@ -1,18 +1,16 @@
 #pragma once
 
-//shared_ptr<SendBuffer> buf = make_shared<SendBuffer>(100);
-//string temp = "client entered!!!";
-//
-//// PacketHeader 
-//BYTE* buffer = buf->Buffer();
-//((PacketHeader*)buffer)->id = 1; // id : 1 ì´ë©´ Hello MSG
-//((PacketHeader*)buffer)->size = (sizeof(temp) + sizeof(PacketHeader));
-//
-//// Packetì— ë‚´ìš©ë¬¼ 
-//// sendBifferì˜ writePosì— ì ‘ê·¼ ë¶ˆê°€
-////::memcpy(&buffer[4], temp.data(), sizeof(temp));
-//
-//buf->CopyData_Packet((BYTE*)temp.data(), sizeof(temp));
+// shared_ptr<SendBuffer> buf = make_shared<SendBuffer>(100);
+// string temp = "client entered!!!";
+// 
+// BYTE* buffer = buf->Buffer();
+// ((PacketHeader*)buffer)->id = 1; // id : 1 ÀÌ¸é Hello MSG
+// ((PacketHeader*)buffer)->size = (sizeof(temp) + sizeof(PacketHeader));
+// 
+// // sendBufferÀÇ writePos¿¡ Á¢±Ù ºÒ°¡
+// // ::memcpy(&buffer[4], temp.data(), sizeof(temp));
+// buf->CopyData_Packet((BYTE*)temp.data(), sizeof(temp));
+
 class BufferWriter
 {
 public:
@@ -34,7 +32,7 @@ public:
 	template<typename T>
 	T* Reserve(uint16 count);
 
-	// ìš°ì¸¡ê°’ ì°¸ì¡°ë¥¼ Templateì´ë‘ ê°™ì´ ì“°ë©´ ë³´í¸ì°¸ì¡°(ì™¼ìª½ê°’, ìš°ì¸¡ê°’)
+	// ¿ìÃø°ª ÂüÁ¶¸¦ TemplateÀÌ¶û °°ÀÌ ¾²¸é º¸ÆíÂüÁ¶(¿ŞÂÊ°ª, ¿ìÃø°ª)
 	template<typename T>
 	BufferWriter& operator<<(T&& src);
 
@@ -47,7 +45,7 @@ private:
 template<typename T>
 inline T* BufferWriter::Reserve()
 {
-	if (FreeSize() < sizeof(T))
+	if(FreeSize() < sizeof(T))
 		return nullptr;
 
 	T* ret = reinterpret_cast<T*>(&_buffer[_pos]);
@@ -59,17 +57,17 @@ inline T* BufferWriter::Reserve()
 template<typename T>
 inline T* BufferWriter::Reserve(uint16 count)
 {
-	if (FreeSize() < sizeof(T)* count)
+	if (FreeSize() < sizeof(T) * count)
 		return nullptr;
 
 	T* ret = reinterpret_cast<T*>(&_buffer[_pos]);
-	_pos += sizeof(T)* count;
+	_pos += sizeof(T) * count;
 
 	return ret;
 }
 
 
-// ë³´í¸ì°¸ì¡°
+// º¸ÆíÂüÁ¶
 template<typename T>
 inline BufferWriter& BufferWriter::operator<<(T&& src)
 {

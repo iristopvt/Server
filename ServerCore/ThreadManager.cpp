@@ -28,9 +28,9 @@ void ThreadManager::Launch(function<void(void)> callback)
 
 void ThreadManager::Join()
 {
-	for (auto& thread : _threads)
+	for(auto& thread : _threads)
 	{
-		if (thread.joinable())
+		if(thread.joinable())
 			thread.join();
 	}
 
